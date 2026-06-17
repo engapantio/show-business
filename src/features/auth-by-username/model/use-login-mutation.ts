@@ -9,11 +9,11 @@ export function useLoginMutation(): UseMutationResult<LoginResponse, Error, Logi
       setAuthState({
         token: data.accessToken,
         user: {
-          id:        data.id,
-          username:  data.username,
+          id: data.id,
+          username: data.username,
           firstName: data.firstName,
-          lastName:  data.lastName,
-          image:     data.image,
+          lastName: data.lastName,
+          image: data.image,
         },
       });
     },

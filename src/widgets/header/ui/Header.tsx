@@ -1,93 +1,88 @@
-import { AppBar, Toolbar, Box, Button, Typography, Stack, Avatar } from '@mui/material';
-import { Link, useLocation } from '@tanstack/react-router';
+import { Box, Container, Button } from '@mui/material';
+import { Link, useLocation, useNavigate } from '@tanstack/react-router';
+import PersonOutlineIcon from '@mui/icons-material/Person2Outlined';
 import { useAuthState, logout } from '@/features/auth-by-username';
+import { Logo } from '@/shared/ui/';
 
-interface NavLink {
-  label: string;
-  to: '/' | '/posts';
-}
-
-const NAV_LINKS: readonly NavLink[] = [
+const NAV = [
   { label: 'Home', to: '/' },
-  { label: 'Stories', to: '/posts' },
+  { label: 'Explore', to: '/explore' },
+  { label: 'Inspiration', to: '/inspiration' },
+  { label: 'Contact us', to: '/contact' },
 ] as const;
 
 export function Header() {
-  const { user } = useAuthState();
-  const loc = useLocation();
+  const auth = useAuthState();
+  const isAuthenticated = Boolean(auth.token);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleLogout = () => {
+    logout();
+    navigate({ to: '/' });
+  };
 
   return (
-    <AppBar position="sticky" elevation={0}>
-      <Toolbar sx={{ justifyContent: 'space-between', gap: 2, px: { xs: 2, sm: 3, md: 4 } }}>
-        <Typography
-          component={Link}
-          to="/"
+    <Box
+      component="header"
+      sx={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        bgcolor: '#fff',
+      }}
+    >
+      <Container
+        maxWidth="xl"
+        sx={{
+          height: 72,
+          display: 'grid',
+          gridTemplateColumns: '1fr auto 1fr',
+          alignItems: 'center',
+          px: { xs: 2, sm: 3, md: 4 },
+        }}
+      >
+        <Logo />
+        <Box
           sx={{
-            fontFamily: "'Playfair Display', Georgia, serif",
-            fontSize: { xs: '1.125rem', sm: '1.25rem', md: '1.375rem' },
-            fontWeight: 700,
-            color: 'text.primary',
-            letterSpacing: '-0.02em',
+            display: { xs: 'none', sm: 'flex' },
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: { sm: 2, md: 4 },
           }}
         >
-          SHOW{' '}
-          <Box component="span" sx={{ color: 'primary.main' }}>
-            BUSINESS
-          </Box>
-        </Typography>
-
-        <Stack
-          direction="row"
-          alignItems="center"
-          gap={{ xs: 2, md: 4 }}
-          sx={{ display: { xs: 'none', sm: 'flex' } }}
-        >
-          {NAV_LINKS.map((link) => {
-            const isActive = loc.pathname === link.to;
-            return (
-              <Typography
-                key={link.to}
-                component={Link}
-                to={link.to}
-                sx={{
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
-                  color: isActive ? 'primary.main' : 'text.secondary',
-                  borderBottom: '2px solid',
-                  borderColor: isActive ? 'primary.main' : 'transparent',
-                  pb: 0.25,
-                  transition: 'color 180ms ease',
-                  '&:hover': { color: 'primary.main' },
-                }}
-              >
-                {link.label}
-              </Typography>
-            );
-          })}
-
-          {user !== null ? (
-            <Stack direction="row" alignItems="center" gap={1.5}>
-              <Avatar src={user.image} alt={user.firstName} sx={{ width: 32, height: 32 }} />
-              <Typography variant="caption" fontWeight={600}>
-                {user.firstName}
-              </Typography>
-              <Button variant="outlined" size="small" onClick={logout} sx={{ borderRadius: 9999 }}>
-                Log out
-              </Button>
-            </Stack>
-          ) : (
-            <Button
+          {NAV.map((item) => (
+            <Box
+              key={item.to}
               component={Link}
-              to="/login"
-              variant="contained"
-              size="small"
-              sx={{ borderRadius: 9999, px: 2.5 }}
+              to={item.to}
+              sx={{
+                textDecoration: 'none',
+                color: location.pathname === item.to ? '#2ad18a' : '#000',
+                fontFamily: 'var(--font-family)',
+                fontWeight: 400,
+                fontSize: 16,
+                borderBottom:
+                  location.pathname === item.to ? '2px solid #2ad18a' : '2px solid transparent',
+                pb: 0.25,
+              }}
             >
+              {item.label}
+            </Box>
+          ))}
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          {isAuthenticated ? (
+            <Button startIcon={<PersonOutlineIcon />} onClick={handleLogout} variant="contained">
+              Logout
+            </Button>
+          ) : (
+            <Button component={Link} to="/login" variant="contained" color="primary" size="small">
               Log in
             </Button>
           )}
-        </Stack>
-      </Toolbar>
-    </AppBar>
+        </Box>
+      </Container>
+    </Box>
   );
 }

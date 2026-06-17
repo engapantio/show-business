@@ -12,6 +12,7 @@ import PersonOutlineIcon from '@mui/icons-material/Person2Outlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+// import { useNavigate } from '@tanstack/react-router';
 import { useLoginMutation } from '../model/use-login-mutation';
 
 export function LoginForm() {
@@ -19,10 +20,12 @@ export function LoginForm() {
   const [password, setPassword] = useState<string>('emilyspass');
   const [showPwd, setShowPwd] = useState<boolean>(false);
   const { mutate, isPending, isError, error } = useLoginMutation();
+  // const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>): void => {
     e.preventDefault();
     mutate({ username, password });
+    // navigate({ to: '/inspiration' });
   };
 
   return (
@@ -34,15 +37,17 @@ export function LoginForm() {
       <TextField
         label="Username"
         value={username}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+        onChange={(e) => setUsername(e.target.value)}
         required
         fullWidth
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <PersonOutlineIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <PersonOutlineIcon fontSize="small" sx={{ color: 'text.secondary' }} />
+              </InputAdornment>
+            ),
+          },
         }}
       />
       <TextField
@@ -52,27 +57,29 @@ export function LoginForm() {
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
         required
         fullWidth
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <LockOutlinedIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-            </InputAdornment>
-          ),
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                size="small"
-                onClick={() => setShowPwd((v) => !v)}
-                aria-label="Toggle password visibility"
-              >
-                {showPwd ? (
-                  <VisibilityOffOutlinedIcon fontSize="small" />
-                ) : (
-                  <VisibilityOutlinedIcon fontSize="small" />
-                )}
-              </IconButton>
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <LockOutlinedIcon fontSize="small" sx={{ color: 'text.secondary' }} />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  size="small"
+                  onClick={() => setShowPwd((v) => !v)}
+                  aria-label="Toggle password visibility"
+                >
+                  {showPwd ? (
+                    <VisibilityOffOutlinedIcon fontSize="small" />
+                  ) : (
+                    <VisibilityOutlinedIcon fontSize="small" />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            ),
+          },
         }}
       />
 

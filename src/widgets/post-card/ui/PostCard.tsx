@@ -2,8 +2,8 @@ import { Card, CardContent, CardActionArea, Box, Typography, Stack, Divider } fr
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { Link } from '@tanstack/react-router';
-import { PostTag } from '@/entities/post';
-import type { Post } from '@/entities/post';
+import { PostTag } from '@/entities/news';
+import type { Post } from '@/entities/news';
 
 interface PostCardProps {
   post: Post;

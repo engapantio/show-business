@@ -1,9 +1,8 @@
-export interface User {
+export interface DJUser {
   id: number;
-  username: string;
   firstName: string;
   lastName: string;
-  email: string;
+  username: string;
   image: string;
-  age: number;
+  email: string;
 }

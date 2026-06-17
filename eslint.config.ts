@@ -41,7 +41,7 @@ export default defineConfig([
       ],
 
       'no-console': ['warn', { allow: ['warn', 'error'] }],
-    },  
+    },
   },
   {
     files: ['src/routes/**/*.{ts,tsx}'],

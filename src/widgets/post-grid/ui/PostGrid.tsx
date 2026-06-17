@@ -2,7 +2,7 @@ import { Grid } from '@mui/material';
 import { PostCard } from '@/widgets/post-card';
 import { SkeletonCard } from './SkeletonCard';
 import { EmptyState } from './EmptyState';
-import type { Post } from '@/entities/post';
+import type { Post } from '@/entities/news';
 
 interface PostGridProps {
   posts: Post[];

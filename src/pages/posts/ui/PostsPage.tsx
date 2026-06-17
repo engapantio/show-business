@@ -3,10 +3,10 @@ import { Box, Container, Typography, Stack, Pagination } from '@mui/material';
 import { PostGrid } from '@/widgets/post-grid';
 import { SearchInput } from '@/features/search';
 import { TagFilter } from '@/features/filter-by-tag';
-import { usePostsQuery, usePostSearchQuery, usePostsByTagQuery, type Post } from '@/entities/post';
-import { DEFAULT_LIMIT } from '@/shared/config/env';
+import { usePostsQuery, usePostSearchQuery, usePostsByTagQuery, type Post } from '@/entities/news';
+import { DEFAULT_LIMIT } from '@/shared/config/constants';
 
-export function PostsPage(){
+export function PostsPage() {
   const [search, setSearch] = useState<string>('');
   const [activeTag, setActiveTag] = useState<string>('');
   const [page, setPage] = useState<number>(1);

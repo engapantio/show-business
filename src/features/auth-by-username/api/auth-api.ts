@@ -1,4 +1,4 @@
-import { httpPost } from '@/shared/api/http';
+import { httpPost } from '@/shared/api/client';
 
 export interface LoginPayload {
   username: string;
