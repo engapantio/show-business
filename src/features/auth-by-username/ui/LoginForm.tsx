@@ -12,7 +12,6 @@ import PersonOutlineIcon from '@mui/icons-material/Person2Outlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
-// import { useNavigate } from '@tanstack/react-router';
 import { useLoginMutation } from '../model/use-login-mutation';
 
 export function LoginForm() {
@@ -20,12 +19,10 @@ export function LoginForm() {
   const [password, setPassword] = useState<string>('emilyspass');
   const [showPwd, setShowPwd] = useState<boolean>(false);
   const { mutate, isPending, isError, error } = useLoginMutation();
-  // const navigate = useNavigate();
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>): void => {
     e.preventDefault();
     mutate({ username, password });
-    // navigate({ to: '/inspiration' });
   };
 
   return (
@@ -97,7 +94,7 @@ export function LoginForm() {
         disabled={isPending}
         sx={{ py: 1.5 }}
       >
-        {isPending ? 'Signing in…' : 'Sign in'}
+        {isPending ? 'Logging in…' : 'Log in'}
       </Button>
 
       <Typography variant="caption" color="text.secondary" align="center">

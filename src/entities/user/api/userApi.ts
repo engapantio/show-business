@@ -1,6 +1,6 @@
 import { apiGet } from '@/shared/api/client';
-import type { DJUser } from '../model/types';
+import type { User } from '../model/types';
 
 export const userApi = {
-  getUser: (id: number) => apiGet<DJUser>(`/users/${id}`),
+  getUser: (id: number) => apiGet<User>(`/users/${id}`),
 };

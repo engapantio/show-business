@@ -36,11 +36,3 @@ export interface CommentsResponse {
   skip: number;
   limit: number;
 }
-
-export interface DJUser {
-  id: number;
-  firstName: string;
-  lastName: string;
-  username: string;
-  image: string;
-}

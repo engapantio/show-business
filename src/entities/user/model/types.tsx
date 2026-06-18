@@ -1,4 +1,4 @@
-export interface DJUser {
+export interface User {
   id: number;
   firstName: string;
   lastName: string;

@@ -38,7 +38,7 @@ export function LoginPage() {
             Welcome back
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Sign in to access exclusive stories
+            Sign in to find inspiration
           </Typography>
         </Box>
         <LoginForm />

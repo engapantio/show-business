@@ -1,11 +1,12 @@
 import { Box, Typography } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
+import '@gouch/to-title-case';
 import type { Post } from '../model/types';
 import { AUTHOR_NAME } from '@/shared/config/constants';
 
 export function TopStoryRow({ post, index }: { post: Post; index: number }) {
   const navigate = useNavigate();
-  const thumb = `https://picsum.photos/seed/topstory-${post.id}/200/124`;
+  const thumb = `https://picsum.photos/seed/post-${post.id}/200/124`;
 
   return (
     <Box
@@ -59,7 +60,7 @@ export function TopStoryRow({ post, index }: { post: Post; index: number }) {
             overflow: 'hidden',
           }}
         >
-          {post.title}
+          {post.title.toTitleCase()}
         </Typography>
 
         <Typography

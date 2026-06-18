@@ -8,7 +8,7 @@ export function Logo() {
         sx={{
           fontFamily: 'var(--second-family)',
           fontWeight: 600,
-          fontSize: '24px',
+          fontSize: { xs: '16px', md: '24px' },
           color: '#2ad18a',
           textTransform: 'uppercase',
           letterSpacing: '0.01em',

@@ -47,7 +47,7 @@ export function CommentCard({ comment }: { comment: Comment }) {
           color: '#9da3ae',
         }}
       >
-        👍 {comment.likes} likes
+        👍 {comment.likes}
       </Typography>
     </Box>
   );

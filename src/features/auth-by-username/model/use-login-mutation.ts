@@ -1,8 +1,13 @@
+import { useNavigate } from '@tanstack/react-router';
 import { useMutation, type UseMutationResult } from '@tanstack/react-query';
 import { authApi, type LoginPayload, type LoginResponse } from '../api/auth-api';
 import { setAuthState } from './auth-store';
+import { Route } from '@/routes/login';
 
 export function useLoginMutation(): UseMutationResult<LoginResponse, Error, LoginPayload> {
+  const navigate = useNavigate();
+  const search = Route.useSearch();
+
   return useMutation<LoginResponse, Error, LoginPayload>({
     mutationFn: (payload) => authApi.login(payload),
     onSuccess: (data) => {
@@ -16,6 +21,7 @@ export function useLoginMutation(): UseMutationResult<LoginResponse, Error, Logi
           image: data.image,
         },
       });
+      navigate({ to: search.redirect ?? '/inspiration' });
     },
   });
 }

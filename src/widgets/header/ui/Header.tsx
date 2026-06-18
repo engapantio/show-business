@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Box, Container, Button } from '@mui/material';
 import { Link, useLocation, useNavigate } from '@tanstack/react-router';
 import PersonOutlineIcon from '@mui/icons-material/Person2Outlined';
@@ -13,13 +14,18 @@ const NAV = [
 
 export function Header() {
   const auth = useAuthState();
+  const [isCheckingOut, setIsCheckingOut] = useState<boolean>(false);
   const isAuthenticated = Boolean(auth.token);
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleLogout = () => {
-    logout();
-    navigate({ to: '/' });
+    setIsCheckingOut(true);
+    setTimeout(() => {
+      logout();
+      navigate({ to: '/login', search: {} });
+      setIsCheckingOut(false);
+    }, 1500);
   };
 
   return (
@@ -61,7 +67,7 @@ export function Header() {
                 color: location.pathname === item.to ? '#2ad18a' : '#000',
                 fontFamily: 'var(--font-family)',
                 fontWeight: 400,
-                fontSize: 16,
+                fontSize: { xs: 12, sm: 14, md: 16 },
                 borderBottom:
                   location.pathname === item.to ? '2px solid #2ad18a' : '2px solid transparent',
                 pb: 0.25,
@@ -74,11 +80,11 @@ export function Header() {
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           {isAuthenticated ? (
             <Button startIcon={<PersonOutlineIcon />} onClick={handleLogout} variant="contained">
-              Logout
+              {isCheckingOut ? 'Logging out' : 'Logout'}
             </Button>
           ) : (
             <Button component={Link} to="/login" variant="contained" color="primary" size="small">
-              Log in
+              Sign in
             </Button>
           )}
         </Box>

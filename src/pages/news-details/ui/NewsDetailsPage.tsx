@@ -2,9 +2,7 @@ import { Suspense } from 'react';
 import { useParams } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Box, Container, Divider, Skeleton, Typography } from '@mui/material';
-import { newsQueries } from '@/entities/news/';
-import { BigNewsCard } from '@/entities/news/';
-import { CommentCard } from '@/entities/news/';
+import { newsQueries, BigNewsCard, CommentCard } from '@/entities/news/';
 import { AUTHOR_NAME } from '@/shared/config/constants';
 
 function NewsDetailContent() {
@@ -15,7 +13,7 @@ function NewsDetailContent() {
 
   return (
     <>
-      <BigNewsCard post={post} imgSeed={`detail-${id}`} />
+      <BigNewsCard post={post} />
       <Box sx={{ mt: 2, mb: 4 }}>
         <Typography variant="subtitle1">{AUTHOR_NAME}</Typography>
         <Typography variant="body1" sx={{ mt: 2, whiteSpace: 'pre-wrap' }}>

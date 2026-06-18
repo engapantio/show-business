@@ -9,6 +9,12 @@ export const newsQueries = {
       queryFn: () => newsApi.getPosts(PAGE_SIZE, (page - 1) * PAGE_SIZE),
     }),
 
+  listAll: () =>
+    queryOptions({
+      queryKey: ['posts', 'list', 'all'],
+      queryFn: () => newsApi.getPosts(0, 0),
+    }),
+
   detail: (id: number) =>
     queryOptions({
       queryKey: ['posts', 'detail', id],
