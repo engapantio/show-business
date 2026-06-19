@@ -43,7 +43,7 @@ export const newsQueries = {
         return data.comments.reduce<Record<number, number>>((acc, comment) => {
           acc[comment.postId] = (acc[comment.postId] ?? 0) + 1;
           return acc;
-        }, {})
+        }, {});
       },
     }),
 };

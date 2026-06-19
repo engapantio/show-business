@@ -6,34 +6,49 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { useRegisterMutation } from '../model/use-register-mutation';
+import { registerSchema } from '../model/auth-schema';
+import { mapZodErrors, type FieldErrors } from '@/shared';
 
 type RegisterFormProps = {
   redirectTo?: string;
 };
+
+type RegisterFields = 'email' | 'username' | 'password';
 
 export function RegisterForm({ redirectTo }: RegisterFormProps) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPwd, setShowPwd] = useState(false);
-
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors<RegisterFields>>({});
   const { mutate, isPending, isError, error } = useRegisterMutation(redirectTo);
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutate({ username, email, password });
+    const result = registerSchema.safeParse({ email, username, password });
+
+    if (!result.success) {
+      setFieldErrors(mapZodErrors<RegisterFields>(result.error));
+      return;
+    }
+
+    setFieldErrors({});
+    mutate(result.data);
   };
 
   return (
     <Box
       component="form"
+      noValidate
       onSubmit={handleSubmit}
       sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, width: '100%' }}
     >
       <TextField
         label="Username"
         value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+        error={!!fieldErrors?.username}
+        helperText={fieldErrors?.username}
         required
         fullWidth
         slotProps={{
@@ -51,7 +66,9 @@ export function RegisterForm({ redirectTo }: RegisterFormProps) {
         label="Email"
         type="email"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+        error={!!fieldErrors?.email}
+        helperText={fieldErrors?.email}
         required
         fullWidth
         slotProps={{
@@ -69,7 +86,9 @@ export function RegisterForm({ redirectTo }: RegisterFormProps) {
         label="Password"
         type={showPwd ? 'text' : 'password'}
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+        error={!!fieldErrors?.password}
+        helperText={fieldErrors?.password}
         required
         fullWidth
         slotProps={{

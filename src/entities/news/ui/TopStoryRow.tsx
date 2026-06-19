@@ -94,8 +94,8 @@ export function TopStoryRow({ post, index, commentsCount }: TopStoryRowProps) {
             mt: 0.25,
           }}
         >
-          10:00 AM | 
-          <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75 }}>
+          10:00 AM |
+          <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75 }}>
             <SmsOutlineIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
             <span>{commentsCount}</span>
           </Box>

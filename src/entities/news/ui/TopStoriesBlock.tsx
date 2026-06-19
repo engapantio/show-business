@@ -5,7 +5,6 @@ import { newsQueries } from '../model/queries';
 import { TopStoryRow } from './TopStoryRow';
 
 export function TopStoriesBlock({ posts }: { posts: Post[] }) {
-
   const { data: commentsCountMap = {} } = useQuery(newsQueries.commentsCountMap());
   return (
     <Box

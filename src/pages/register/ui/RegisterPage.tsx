@@ -6,11 +6,7 @@ export function RegisterPage() {
   const search = Route.useSearch();
 
   return (
-    <AuthLayout
-      title="Create account"
-      subtitle="Register to find inspiration"
-      redirect={search.redirect}
-    >
+    <AuthLayout title="Sign up" subtitle="Register to find inspiration" redirect={search.redirect}>
       <RegisterForm redirectTo={search.redirect} />
     </AuthLayout>
   );

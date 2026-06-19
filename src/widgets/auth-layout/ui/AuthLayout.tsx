@@ -47,12 +47,12 @@ export function AuthLayout({ title, subtitle, children, redirect }: AuthLayoutPr
           borderColor: 'divider',
           borderRadius: 3,
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}
       >
-        <Tabs value={tabValue} onChange={handleTabChange} sx={{  mb: 4,  }}>
-          <Tab label="Register" value="/register" />
-          <Tab label="Login" value="/login" />
+        <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 4 }}>
+          <Tab key="register-form" label="Register" value="/register" />
+          <Tab key="login-form" label="Login" value="/login" />
         </Tabs>
 
         <Box sx={{ mb: 4, textAlign: 'center' }}>
@@ -61,7 +61,7 @@ export function AuthLayout({ title, subtitle, children, redirect }: AuthLayoutPr
             sx={{
               fontFamily: 'var(--third-family)',
               fontWeight: 700,
-              fontSize: { xs:56, sm: 72 },
+              fontSize: { xs: 56, sm: 72 },
               mb: 1,
             }}
           >

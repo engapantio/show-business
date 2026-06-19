@@ -1,6 +1,43 @@
-import { Box, Container, Typography, TextField, Button, Paper, Stack } from '@mui/material';
+import { useState } from 'react';
+import { Box, Container, Typography, TextField, Button, Paper, Stack, Alert } from '@mui/material';
+import { mapZodErrors, type FieldErrors } from '@/shared';
+import { contactSchema } from '@/features/contact-us';
+import { useContactSubmitMutation } from '@/features/contact-us';
+
+type ContactFields = 'name' | 'email' | 'message';
+
+const initialValues = {
+  name: '',
+  email: '',
+  message: '',
+};
 
 export function ContactPage() {
+  const [values, setValues] = useState(initialValues);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors<ContactFields>>({});
+  const { mutate, isPending, isError, error, reset } = useContactSubmitMutation();
+
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const result = contactSchema.safeParse(values);
+
+    if (!result.success) {
+      setFieldErrors(mapZodErrors<ContactFields>(result.error));
+      return;
+    }
+
+    setFieldErrors({});
+
+    mutate(result.data, {
+      onSuccess: () => {
+        // showToast('Comment submitted successfully', 'success'); // not implemented yet
+        setValues(initialValues);
+        setFieldErrors({});
+        reset();
+      },
+    });
+  };
   return (
     <Container maxWidth="md" sx={{ py: { xs: 3, md: 5 } }}>
       <Paper
@@ -34,20 +71,50 @@ export function ContactPage() {
             </Typography>
           </Box>
 
-          <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2.5}>
-              <TextField fullWidth label="Full name" />
-              <TextField fullWidth label="Email" type="email" />
-            </Stack>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}
+          >
+            <TextField
+              label="Name"
+              value={values.name}
+              onChange={(e) => setValues((prev) => ({ ...prev, name: e.target.value }))}
+              error={!!fieldErrors.name}
+              helperText={fieldErrors.name}
+              fullWidth
+            />
 
-            <TextField fullWidth label="Subject" />
-            <TextField fullWidth label="Message" multiline minRows={6} />
+            <TextField
+              label="Email"
+              value={values.email}
+              onChange={(e) => setValues((prev) => ({ ...prev, email: e.target.value }))}
+              error={!!fieldErrors.email}
+              helperText={fieldErrors.email}
+              fullWidth
+            />
 
-            <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Button variant="contained" color="primary" sx={{ minWidth: 180 }}>
-                Submit
-              </Button>
-            </Box>
+            <TextField
+              label="Comment"
+              value={values.message}
+              onChange={(e) => setValues((prev) => ({ ...prev, message: e.target.value }))}
+              error={!!fieldErrors.message}
+              helperText={fieldErrors.message}
+              multiline
+              minRows={5}
+              fullWidth
+            />
+
+            {isError && (
+              <Alert severity="error" sx={{ borderRadius: 2 }}>
+                {error.message}
+              </Alert>
+            )}
+
+            <Button type="submit" variant="contained" disabled={isPending}>
+              {isPending ? 'Sending…' : 'Leave Comment'}
+            </Button>
           </Box>
         </Stack>
       </Paper>

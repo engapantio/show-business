@@ -3,7 +3,7 @@ import { Box, Container, Button } from '@mui/material';
 import { Link, useLocation, useNavigate } from '@tanstack/react-router';
 import PersonOutlineIcon from '@mui/icons-material/Person2Outlined';
 import { useAuthState, logout } from '@/features/auth-by-username';
-import { Logo } from '@/shared/ui/';
+import { Logo } from '@/shared';
 
 const NAV = [
   { label: 'Home', to: '/' },
