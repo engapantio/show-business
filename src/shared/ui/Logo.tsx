@@ -9,7 +9,7 @@ export function Logo() {
           fontFamily: 'var(--second-family)',
           fontWeight: 600,
           fontSize: { xs: '16px', md: '24px' },
-          color: '#2ad18a',
+          color: 'primary.main',
           textTransform: 'uppercase',
           letterSpacing: '0.01em',
         }}

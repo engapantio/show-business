@@ -48,7 +48,7 @@ export function ExplorePage() {
           fontWeight: 400,
           fontSize: { xs: '36px', md: '72px' },
           lineHeight: '110%',
-          color: '#000',
+          color: 'text.primary',
           width: '100%',
           whiteSpace: 'nowrap',
           overflow: 'hidden',
@@ -69,7 +69,7 @@ export function ExplorePage() {
           input: {
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon sx={{ color: '#9da3ae' }} />
+                <SearchIcon sx={{ color: 'text.secondary' }} />
               </InputAdornment>
             ),
           },

@@ -1,26 +1,27 @@
 import { useNavigate } from '@tanstack/react-router';
 import { useMutation, type UseMutationResult } from '@tanstack/react-query';
-import { authApi, type LoginPayload, type LoginResponse } from '../api/auth-api';
+import { authApi, type RegisterPayload, type RegisterResponse } from '../api/auth-api';
 import { setAuthState } from './auth-store';
 
-export function useLoginMutation(
+export function useRegisterMutation(
   redirectTo?: string,
-): UseMutationResult<LoginResponse, Error, LoginPayload> {
+): UseMutationResult<RegisterResponse, Error, RegisterPayload> {
   const navigate = useNavigate();
 
-  return useMutation<LoginResponse, Error, LoginPayload>({
-    mutationFn: authApi.login,
+  return useMutation<RegisterResponse, Error, RegisterPayload>({
+    mutationFn: authApi.register,
     onSuccess: (data) => {
       setAuthState({
-        token: data.accessToken,
+        token: `registered-${data.id}`,
         user: {
           id: data.id,
           username: data.username,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          image: data.image,
+          firstName: data.username,
+          lastName: '',
+          image: '',
         },
       });
+
       navigate({ to: redirectTo ?? '/inspiration' });
     },
   });

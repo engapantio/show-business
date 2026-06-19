@@ -1,8 +1,12 @@
 import { Box, Typography } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import type { Post } from '../model/types';
+import { newsQueries } from '../model/queries';
 import { TopStoryRow } from './TopStoryRow';
 
 export function TopStoriesBlock({ posts }: { posts: Post[] }) {
+
+  const { data: commentsCountMap = {} } = useQuery(newsQueries.commentsCountMap());
   return (
     <Box
       sx={{
@@ -19,7 +23,7 @@ export function TopStoriesBlock({ posts }: { posts: Post[] }) {
           fontWeight: 700,
           fontSize: 14,
           textTransform: 'uppercase',
-          color: '#2ad18a',
+          color: 'main.primary',
           letterSpacing: '0.08em',
         }}
       >
@@ -29,7 +33,7 @@ export function TopStoriesBlock({ posts }: { posts: Post[] }) {
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         {posts.slice(0, 4).map((post, i) => (
           <Box key={post.id}>
-            <TopStoryRow post={post} index={i} />
+            <TopStoryRow post={post} index={i} commentsCount={commentsCountMap[post.id] ?? 0} />
           </Box>
         ))}
       </Box>

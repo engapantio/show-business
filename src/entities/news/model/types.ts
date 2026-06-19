@@ -36,3 +36,10 @@ export interface CommentsResponse {
   skip: number;
   limit: number;
 }
+
+export interface CommentsListResponse {
+  comments: Comment[];
+  total: number;
+  skip: number;
+  limit: number;
+}

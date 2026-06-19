@@ -19,7 +19,7 @@ export function CommentCard({ comment }: { comment: Comment }) {
           fontSize: '16px',
           lineHeight: '140%',
           textTransform: 'uppercase',
-          color: '#2ad18a',
+          color: 'primary.main',
         }}
       >
         {comment.user.fullName}
@@ -31,7 +31,7 @@ export function CommentCard({ comment }: { comment: Comment }) {
           fontWeight: 400,
           fontSize: '16px',
           lineHeight: '160%',
-          color: '#000',
+          color: 'text.primary',
         }}
       >
         {comment.body}
@@ -44,7 +44,7 @@ export function CommentCard({ comment }: { comment: Comment }) {
           fontSize: '14px',
           lineHeight: '140%',
           textTransform: 'uppercase',
-          color: '#9da3ae',
+          color: 'text.secondary',
         }}
       >
         👍 {comment.likes}

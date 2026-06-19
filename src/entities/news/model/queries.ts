@@ -1,5 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
 import { newsApi } from '../api/newsApi';
+import { commentsApi } from '../api/commentsApi';
 import { PAGE_SIZE } from '@/shared/config/constants';
 
 export const newsQueries = {
@@ -32,5 +33,17 @@ export const newsQueries = {
       queryKey: ['posts', 'search', q, page],
       queryFn: () => newsApi.searchPosts(q, PAGE_SIZE, (page - 1) * PAGE_SIZE),
       enabled: q.trim().length > 0,
+    }),
+  commentsCountMap: () =>
+    queryOptions({
+      queryKey: ['posts', 'comments-count-map'],
+      queryFn: async () => {
+        const data = await commentsApi.listAllPostIds();
+
+        return data.comments.reduce<Record<number, number>>((acc, comment) => {
+          acc[comment.postId] = (acc[comment.postId] ?? 0) + 1;
+          return acc;
+        }, {})
+      },
     }),
 };

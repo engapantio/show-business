@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InspirationRouteImport } from './routes/inspiration'
 import { Route as ExploreRouteImport } from './routes/explore'
@@ -16,6 +17,11 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NewsPostIdRouteImport } from './routes/news/$postId'
 
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/explore': typeof ExploreRoute
   '/inspiration': typeof InspirationRoute
   '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/news/$postId': typeof NewsPostIdRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/explore': typeof ExploreRoute
   '/inspiration': typeof InspirationRoute
   '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/news/$postId': typeof NewsPostIdRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/explore': typeof ExploreRoute
   '/inspiration': typeof InspirationRoute
   '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/news/$postId': typeof NewsPostIdRoute
 }
 export interface FileRouteTypes {
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/explore'
     | '/inspiration'
     | '/login'
+    | '/register'
     | '/news/$postId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/explore'
     | '/inspiration'
     | '/login'
+    | '/register'
     | '/news/$postId'
   id:
     | '__root__'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/explore'
     | '/inspiration'
     | '/login'
+    | '/register'
     | '/news/$postId'
   fileRoutesById: FileRoutesById
 }
@@ -105,11 +117,19 @@ export interface RootRouteChildren {
   ExploreRoute: typeof ExploreRoute
   InspirationRoute: typeof InspirationRoute
   LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
   NewsPostIdRoute: typeof NewsPostIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -161,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExploreRoute: ExploreRoute,
   InspirationRoute: InspirationRoute,
   LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
   NewsPostIdRoute: NewsPostIdRoute,
 }
 export const routeTree = rootRouteImport

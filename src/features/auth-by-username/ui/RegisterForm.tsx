@@ -1,32 +1,27 @@
 import { useState } from 'react';
-import {
-  Box,
-  TextField,
-  Button,
-  Alert,
-  Typography,
-  InputAdornment,
-  IconButton,
-} from '@mui/material';
+import { Box, TextField, Button, Alert, InputAdornment, IconButton } from '@mui/material';
 import PersonOutlineIcon from '@mui/icons-material/Person2Outlined';
+import MailOutlineIcon from '@mui/icons-material/MailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
-import { useLoginMutation } from '../model/use-login-mutation';
+import { useRegisterMutation } from '../model/use-register-mutation';
 
-type LoginFormProps = {
+type RegisterFormProps = {
   redirectTo?: string;
 };
 
-export function LoginForm({ redirectTo }: LoginFormProps) {
-  const [username, setUsername] = useState<string>('emilys');
-  const [password, setPassword] = useState<string>('emilyspass');
-  const [showPwd, setShowPwd] = useState<boolean>(false);
-  const { mutate, isPending, isError, error } = useLoginMutation(redirectTo);
+export function RegisterForm({ redirectTo }: RegisterFormProps) {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPwd, setShowPwd] = useState(false);
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>): void => {
+  const { mutate, isPending, isError, error } = useRegisterMutation(redirectTo);
+
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutate({ username, password });
+    mutate({ username, email, password });
   };
 
   return (
@@ -51,11 +46,30 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
           },
         }}
       />
+
+      <TextField
+        label="Email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        fullWidth
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <MailOutlineIcon fontSize="small" sx={{ color: 'text.secondary' }} />
+              </InputAdornment>
+            ),
+          },
+        }}
+      />
+
       <TextField
         label="Password"
         type={showPwd ? 'text' : 'password'}
         value={password}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
         required
         fullWidth
         slotProps={{
@@ -98,12 +112,8 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
         disabled={isPending}
         sx={{ py: 1.5 }}
       >
-        {isPending ? 'Logging in…' : 'Log in'}
+        {isPending ? 'Registering…' : 'Register'}
       </Button>
-
-      <Typography variant="caption" color="text.secondary" align="center">
-        Demo: <strong>emilys</strong> / <strong>emilyspass</strong>
-      </Typography>
     </Box>
   );
 }

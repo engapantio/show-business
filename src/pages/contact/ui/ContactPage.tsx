@@ -16,7 +16,8 @@ export function ContactPage() {
             <Typography
               variant="h1"
               sx={{
-                fontSize: { xs: '30px', md: '48px' },
+                fontFamily: 'var(--third-family)',
+                fontSize: { xs: '56px', md: '72px' },
                 mb: 1,
               }}
             >
@@ -25,7 +26,7 @@ export function ContactPage() {
             <Typography
               variant="body1"
               sx={{
-                color: '#9da3ae',
+                color: 'text.secondary',
                 maxWidth: '60ch',
               }}
             >

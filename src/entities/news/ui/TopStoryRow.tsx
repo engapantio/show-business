@@ -1,10 +1,13 @@
 import { Box, Typography } from '@mui/material';
+import SmsOutlineIcon from '@mui/icons-material/SmsOutlined';
 import { useNavigate } from '@tanstack/react-router';
 import '@gouch/to-title-case';
 import type { Post } from '../model/types';
 import { AUTHOR_NAME } from '@/shared/config/constants';
 
-export function TopStoryRow({ post, index }: { post: Post; index: number }) {
+type TopStoryRowProps = { post: Post; index: number; commentsCount: number };
+
+export function TopStoryRow({ post, index, commentsCount }: TopStoryRowProps) {
   const navigate = useNavigate();
   const thumb = `https://picsum.photos/seed/post-${post.id}/200/124`;
 
@@ -53,7 +56,7 @@ export function TopStoryRow({ post, index }: { post: Post; index: number }) {
             fontWeight: 700,
             fontSize: { xs: '16px', md: '22px' },
             lineHeight: '140%',
-            color: '#000',
+            color: 'text.primary',
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
@@ -70,7 +73,7 @@ export function TopStoryRow({ post, index }: { post: Post; index: number }) {
             fontSize: { xs: '12px', md: '16px' },
             lineHeight: '140%',
             textTransform: 'uppercase',
-            color: '#2ad18a',
+            color: 'primary.main',
             mt: 0.5,
           }}
         >
@@ -80,15 +83,22 @@ export function TopStoryRow({ post, index }: { post: Post; index: number }) {
         <Typography
           sx={{
             fontFamily: 'var(--font-family)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2.5,
             fontWeight: 500,
             fontSize: { xs: '12px', md: '16px' },
             lineHeight: '140%',
             textTransform: 'uppercase',
-            color: '#9da3ae',
+            color: 'text.secondary',
             mt: 0.25,
           }}
         >
-          10:00 AM | 💬 {post.reactions?.likes ?? 0}
+          10:00 AM | 
+          <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75 }}>
+            <SmsOutlineIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
+            <span>{commentsCount}</span>
+          </Box>
         </Typography>
       </Box>
 

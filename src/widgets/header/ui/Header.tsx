@@ -35,7 +35,7 @@ export function Header() {
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        bgcolor: '#fff',
+        bgcolor: 'background.default',
       }}
     >
       <Container
@@ -64,7 +64,7 @@ export function Header() {
               to={item.to}
               sx={{
                 textDecoration: 'none',
-                color: location.pathname === item.to ? '#2ad18a' : '#000',
+                color: location.pathname === item.to ? 'primary.main' : 'text.primary',
                 fontFamily: 'var(--font-family)',
                 fontWeight: 400,
                 fontSize: { xs: 12, sm: 14, md: 16 },
