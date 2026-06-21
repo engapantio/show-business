@@ -1,6 +1,4 @@
-// src/features/contact-us/ui/ContactForm.tsx
-import { Box, Alert } from '@mui/material';
-import { FormField, AppButton } from '@/shared';
+import { FormShell, FormField, } from '@/shared';
 import { useContactForm } from '../model/useContactForm';
 
 export function ContactForm() {
@@ -8,11 +6,14 @@ export function ContactForm() {
     useContactForm();
 
   return (
-    <Box
-      component="form"
-      noValidate
+    <FormShell
       onSubmit={handleSubmit}
-      sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: '100%' }}
+      isPending={isPending}
+      isError={isError}
+      error={error}
+      submitLabel="Leave Comment"
+      pendingLabel="Sending…"
+      buttonSx={{ alignSelf: 'center', mx: 'auto', width: 'auto', px: 6 }}
     >
       <FormField
         label="Name"
@@ -22,7 +23,6 @@ export function ContactForm() {
         helperText={fieldErrors.name}
         required
       />
-
       <FormField
         label="Email"
         type="email"
@@ -32,7 +32,6 @@ export function ContactForm() {
         helperText={fieldErrors.email}
         required
       />
-
       <FormField
         label="Comment"
         value={values.message}
@@ -43,21 +42,6 @@ export function ContactForm() {
         minRows={5}
         required
       />
-
-      {isError && (
-        <Alert severity="error" sx={{ borderRadius: 2 }}>
-          {error?.message}
-        </Alert>
-      )}
-
-      <AppButton
-        type="submit"
-        size="large"
-        loading={isPending}
-        sx={{ py: 1.5, mt: 1, px: 6, alignSelf: 'center' }}
-      >
-        {isPending ? 'Sending…' : 'Leave Comment'}
-      </AppButton>
-    </Box>
+    </FormShell>
   );
 }

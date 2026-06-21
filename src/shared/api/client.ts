@@ -1,9 +1,24 @@
 import { API_BASE_URL } from '@/shared/config/constants';
+import { ApiError } from './apiError';
+
+async function handleResponse<T>(res: Response): Promise<T> {
+  if (!res.ok) {
+    let message = res.statusText;
+    try {
+      const body = (await res.json()) as { message?: string };
+      if (body.message) message = body.message;
+    } catch {
+      // body is not JSON — keep statusText
+    }
+    throw new ApiError(res.status, message);
+  }
+  return res.json() as Promise<T>;
+}
+
 
 export async function apiGet<T>(path: string): Promise<T> {
   const res = await fetch(`${API_BASE_URL}${path}`);
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
-  return res.json() as Promise<T>;
+  return handleResponse<T>(res);
 }
 
 export async function httpPost<T, B = unknown>(path: string, body: B): Promise<T> {
@@ -15,6 +30,5 @@ export async function httpPost<T, B = unknown>(path: string, body: B): Promise<T
     body: JSON.stringify(body),
   });
 
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
-  return res.json() as Promise<T>;
+  return handleResponse<T>(res);
 }
