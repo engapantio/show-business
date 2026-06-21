@@ -1,4 +1,4 @@
-import { FormShell, FormField, } from '@/shared';
+import { FormShell, FormField } from '@/shared';
 import { useContactForm } from '../model/useContactForm';
 
 export function ContactForm() {

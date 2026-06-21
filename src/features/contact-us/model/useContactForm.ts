@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { mapZodErrors, type FieldErrors } from '@/shared';
 import { contactSchema, type ContactFormValues } from './contact-schema';
-import { useContactSubmitMutation } from './use-contact-submit-mutation';
+import { useContactSubmitMutation } from './useContactSubmitMutation';
 
 type ContactFields = keyof ContactFormValues;
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { mapZodErrors, type FieldErrors } from '@/shared';
 import { registerSchema, type RegisterFormValues } from './auth-schema';
-import { useRegisterMutation } from './use-register-mutation';
+import { useRegisterMutation } from './useRegisterMutation';
 
 type RegisterFields = keyof RegisterFormValues;
 

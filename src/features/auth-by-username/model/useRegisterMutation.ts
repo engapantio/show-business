@@ -2,6 +2,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { useMutation, type UseMutationResult } from '@tanstack/react-query';
 import { authApi, type RegisterPayload, type RegisterResponse } from '../api/auth-api';
 import { setAuthState } from './auth-store';
+import { saveRegisteredCredentials } from './registered-users-store';
 
 export function useRegisterMutation(
   redirectTo?: string,
@@ -10,7 +11,13 @@ export function useRegisterMutation(
 
   return useMutation<RegisterResponse, Error, RegisterPayload>({
     mutationFn: authApi.register,
-    onSuccess: (data) => {
+    onSuccess: async (data, variables) => {
+      await saveRegisteredCredentials({
+        username: variables.username,
+        password: variables.password,
+        email: variables.email,
+        id: data.id,
+      });
       setAuthState({
         token: `registered-${data.id}`,
         user: {

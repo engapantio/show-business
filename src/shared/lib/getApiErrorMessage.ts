@@ -3,7 +3,7 @@ import { isApiError } from '@/shared/api/apiError';
 const STATUS_MESSAGES: Record<number, string> = {
   400: 'The request was invalid. Please check your details and try again.',
   401: 'Incorrect username or password.',
-  403: 'You don\'t have permission to do that.',
+  403: "You don't have permission to do that.",
   404: 'The requested resource was not found.',
   409: 'An account with these details already exists.',
   422: 'Some fields are invalid. Please review your input.',

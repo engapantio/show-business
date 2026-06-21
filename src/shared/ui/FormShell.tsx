@@ -1,5 +1,5 @@
 // src/shared/ui/FormShell.tsx
-import { Box, Alert, type SxProps, type Theme} from '@mui/material';
+import { Box, Alert, type SxProps, type Theme } from '@mui/material';
 import type { SubmitEvent, ReactNode } from 'react';
 import { AppButton, getApiErrorMessage } from '@/shared/';
 
@@ -22,7 +22,7 @@ export function FormShell({
   error,
   submitLabel,
   pendingLabel,
-  buttonSx
+  buttonSx,
 }: FormShellProps) {
   return (
     <Box

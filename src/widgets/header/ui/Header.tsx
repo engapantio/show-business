@@ -1,8 +1,4 @@
-import {
-  Box,
-  Container,
-  IconButton,
-} from '@mui/material';
+import { Box, Container, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonOutlineIcon from '@mui/icons-material/Person2Outlined';
 import { Link, useLocation } from '@tanstack/react-router';
@@ -13,14 +9,8 @@ import { NAV } from '../config/nav';
 
 export function Header() {
   const location = useLocation();
-  const {
-    isAuthenticated,
-    isCheckingOut,
-    isDrawerOpen,
-    openDrawer,
-    closeDrawer,
-    handleLogout,
-  } = useHeader();
+  const { isAuthenticated, isCheckingOut, isDrawerOpen, openDrawer, closeDrawer, handleLogout } =
+    useHeader();
 
   return (
     <Box

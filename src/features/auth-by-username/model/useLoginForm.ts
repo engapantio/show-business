@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { mapZodErrors, type FieldErrors } from '@/shared';
 import { loginSchema, type LoginFormValues } from './auth-schema';
-import { useLoginMutation } from './use-login-mutation';
+import { useLoginMutation } from './useLoginMutation';
 
 type LoginFields = keyof LoginFormValues;
 
