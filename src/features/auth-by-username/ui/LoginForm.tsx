@@ -1,9 +1,9 @@
-import { Box, Button, Alert, Typography, InputAdornment, IconButton } from '@mui/material';
+import { Box, Alert, Typography, InputAdornment, IconButton } from '@mui/material';
 import PersonOutlineIcon from '@mui/icons-material/Person2Outlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
-import { FormField } from '@/shared';
+import { FormField, AppButton} from '@/shared';
 import { useLoginForm } from '../model/useLoginForm';
 
 interface LoginFormProps {
@@ -88,16 +88,15 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
         </Alert>
       )}
 
-      <Button
+      <AppButton
         type="submit"
-        variant="contained"
         size="large"
+        loading={isPending}
         fullWidth
-        disabled={isPending}
         sx={{ py: 1.5, mt: 1 }}
       >
         {isPending ? 'Logging in…' : 'Log in'}
-      </Button>
+      </AppButton>
 
       <Typography variant="caption" color="text.secondary" align="center">
         Demo: <strong>emilys</strong> / <strong>emilyspass</strong>

@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Box, Container, Button } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { Link, useLocation, useNavigate } from '@tanstack/react-router';
 import PersonOutlineIcon from '@mui/icons-material/Person2Outlined';
 import { useAuthState, logout } from '@/features/auth-by-username';
 import { Logo } from '@/shared';
+import { AppButton } from '@/shared';
 
 const NAV = [
   { label: 'Home', to: '/' },
@@ -79,13 +80,13 @@ export function Header() {
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           {isAuthenticated ? (
-            <Button startIcon={<PersonOutlineIcon />} onClick={handleLogout} variant="contained">
+            <AppButton startIcon={<PersonOutlineIcon />} loading={ isCheckingOut } onClick={handleLogout}>
               {isCheckingOut ? 'Logging out' : 'Logout'}
-            </Button>
+            </AppButton>
           ) : (
-            <Button component={Link} to="/login" variant="contained" color="primary" size="small">
+            <AppButton component={Link} to="/login"  size="small">
               Sign in
-            </Button>
+            </AppButton>
           )}
         </Box>
       </Container>

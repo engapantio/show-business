@@ -1,10 +1,10 @@
-import { Box, Button, Alert, InputAdornment, IconButton } from '@mui/material';
+import { Box, Alert, InputAdornment, IconButton } from '@mui/material';
 import PersonOutlineIcon from '@mui/icons-material/Person2Outlined';
 import MailOutlineIcon from '@mui/icons-material/MailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
-import { FormField } from '@/shared';
+import { FormField, AppButton } from '@/shared';
 import { useRegisterForm } from '../model/useRegisterForm';
 
 interface RegisterFormProps {
@@ -108,16 +108,15 @@ export function RegisterForm({ redirectTo }: RegisterFormProps) {
         </Alert>
       )}
 
-      <Button
+      <AppButton
         type="submit"
-        variant="contained"
         size="large"
         fullWidth
-        disabled={isPending}
+        loading={isPending}
         sx={{ py: 1.5, mt: 1 }}
       >
         {isPending ? 'Registering…' : 'Register'}
-      </Button>
+      </AppButton>
     </Box>
   );
 }

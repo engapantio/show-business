@@ -1,6 +1,6 @@
 // src/features/contact-us/ui/ContactForm.tsx
-import { Box, Button, Alert } from '@mui/material';
-import { FormField } from '@/shared';
+import { Box, Alert } from '@mui/material';
+import { FormField, AppButton } from '@/shared';
 import { useContactForm } from '../model/useContactForm';
 
 export function ContactForm() {
@@ -50,16 +50,14 @@ export function ContactForm() {
         </Alert>
       )}
 
-      <Button
+      <AppButton
         type="submit"
-        variant="contained"
         size="large"
-        fullWidth
-        disabled={isPending}
-        sx={{ py: 1.5, mt: 1 }}
+        loading={isPending}
+        sx={{ py: 1.5, mt: 1, px: 6, alignSelf: 'center' }}
       >
         {isPending ? 'Sending…' : 'Leave Comment'}
-      </Button>
+      </AppButton>
     </Box>
   );
 }
