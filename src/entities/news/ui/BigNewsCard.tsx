@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Skeleton, Button, Typography } from '@mui/material';
 import '@gouch/to-title-case';
 import { useNavigate, useMatchRoute } from '@tanstack/react-router';
+import { truncateAtWord } from '@/shared';
 import type { Post } from '../model/types';
 
 export function BigNewsCard({ post, imgSeed }: { post: Post; imgSeed?: string }) {
@@ -58,12 +59,11 @@ export function BigNewsCard({ post, imgSeed }: { post: Post; imgSeed?: string })
           lineHeight: '110%',
           color: 'text.primary',
           width: '100%',
-          whiteSpace: 'nowrap',
           overflow: 'hidden',
-          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
         }}
       >
-        {post.title.toTitleCase()}
+        {truncateAtWord(post.title.toTitleCase(), 34)}
       </Typography>
       {!isPostDetailsPage && (
         <Box
