@@ -1,19 +1,23 @@
 import { Box, Typography } from '@mui/material';
 import SmsOutlineIcon from '@mui/icons-material/SmsOutlined';
 import { useNavigate } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import '@gouch/to-title-case';
 import type { Post } from '../model/types';
-import { AUTHOR_NAME, getPostImageUrl } from '@/shared';
+import { AUTHOR_NAME, PostImage } from '@/shared';
+import { newsQueries } from '../model/queries';
 
 type TopStoryRowProps = { post: Post; index: number; commentsCount: number };
 
 export function TopStoryRow({ post, index, commentsCount }: TopStoryRowProps) {
   const navigate = useNavigate();
-  const thumb = getPostImageUrl(post.id, 200, 124);
+  const queryClient = useQueryClient();
 
   return (
     <Box
       onClick={() => navigate({ to: '/news/$postId', params: { postId: String(post.id) } })}
+      onMouseEnter={() => queryClient.prefetchQuery(newsQueries.detail(post.id))}
+      onFocus={() => queryClient.prefetchQuery(newsQueries.detail(post.id))}
       sx={{
         display: 'grid',
         gridTemplateColumns: {
@@ -35,8 +39,8 @@ export function TopStoryRow({ post, index, commentsCount }: TopStoryRowProps) {
           width: 32,
           height: 32,
           borderRadius: '50%',
-          bgcolor: '#e8eaed',
-          color: '#2ad18a',
+          bgcolor: 'grey.100',
+          color: 'primary.main',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -101,21 +105,18 @@ export function TopStoryRow({ post, index, commentsCount }: TopStoryRowProps) {
           </Box>
         </Typography>
       </Box>
-
-      <Box
-        component="img"
-        src={thumb}
+      <PostImage
+        key={post.id}
+        postId={post.id}
+        width={200}
+        height={124}
         alt={post.title}
-        loading="lazy"
+        eager={index === 0}
         sx={{
           width: { xs: 72, sm: 88, md: 120, lg: 160, xl: 200 },
           height: { xs: 54, sm: 66, md: 90, lg: 107, xl: 124 },
-          objectFit: 'cover',
-          borderRadius: 0,
+          aspectRatio: 'unset',
           justifySelf: 'end',
-        }}
-        onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-          e.currentTarget.src = `https://placehold.co/200x124/e8eaed/9aa0a6?text=No+Image`;
         }}
       />
     </Box>

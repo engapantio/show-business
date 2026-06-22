@@ -4,7 +4,7 @@ import { Box, InputAdornment, TextField, Typography, Skeleton } from '@mui/mater
 import SearchIcon from '@mui/icons-material/Search';
 import { newsQueries, ExploreNewsCard } from '@/entities/news/';
 import { Pagination } from '@/widgets/pagination';
-import { shuffle, PAGE_SIZE, PageContainer } from '@/shared/';
+import { shuffle, useDebounce, PAGE_SIZE, PageContainer } from '@/shared/';
 
 const cardGridSx = {
   display: 'grid',
@@ -15,13 +15,13 @@ const cardGridSx = {
 } as const;
 
 export function ExplorePage() {
-  const [query, setQuery] = useState('');
+  const [inputValue, setInputValue] = useState('');
   const [page, setPage] = useState(1);
-  const trimmedQuery = query.trim();
-  const isSearching = trimmedQuery.length > 0;
+  const debouncedQuery = useDebounce(inputValue.trim(), 900);
+  const isSearching = debouncedQuery.length > 0;
   const { data: listData, isLoading: isListLoading } = useQuery(newsQueries.listAll());
   const { data: searchData, isLoading: isSearchLoading } = useQuery(
-    newsQueries.search(trimmedQuery, page),
+    newsQueries.search(debouncedQuery, page),
   );
 
   const initialPosts = useMemo(() => {
@@ -60,9 +60,9 @@ export function ExplorePage() {
         <TextField
           size="small"
           placeholder="Search news..."
-          value={query}
+          value={inputValue}
           onChange={(e) => {
-            setQuery(e.target.value);
+            setInputValue(e.target.value);
             setPage(1);
           }}
           slotProps={{

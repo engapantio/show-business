@@ -2,11 +2,9 @@ import { Box, Typography } from '@mui/material';
 import { Link } from '@tanstack/react-router';
 import '@gouch/to-title-case';
 import type { Post } from '../model/types';
-import { getPostImageUrl } from '@/shared';
+import { PostImage } from '@/shared';
 
 export function ExploreNewsCard({ post }: { post: Post }) {
-  const img = getPostImageUrl(post.id, 290, 242);
-
   return (
     <Link
       to="/news/$postId"
@@ -24,22 +22,7 @@ export function ExploreNewsCard({ post }: { post: Post }) {
           '&:hover': { opacity: 0.85 },
         }}
       >
-        <Box
-          component="img"
-          src={img}
-          alt={post.title}
-          loading="lazy"
-          sx={{
-            width: '100%',
-            maxWidth: 290,
-            height: 242,
-            objectFit: 'cover',
-            display: 'block',
-          }}
-          onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-            e.currentTarget.src = `https://placehold.co/290x242/e8eaed/9aa0a6?text=No+Image`;
-          }}
-        />
+        <PostImage key={post.id} postId={post.id} width={290} height={242} alt={post.title} />
         <Typography
           sx={{
             width: '100%',

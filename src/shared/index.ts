@@ -1,12 +1,15 @@
+export { queryClient } from './api/queryClient';
 export { getApiErrorMessage } from './lib/getApiErrorMessage';
 export { mapZodErrors, type FieldErrors } from './lib/validation/map-zod-errors';
 export { truncateAtWord } from './lib/truncateAtWord';
 export { shuffle } from './lib/shuffle';
 export { getPostImageUrl } from './lib/getPostImageUrl';
+export { useDebounce } from './lib/useDebounce';
 export { AUTHOR_NAME, PAGE_SIZE } from './config/constants';
 export { theme } from './ui/theme';
 export { PageContainer } from './ui/PageContainer';
 export { Logo } from './ui/Logo';
+export { PostImage } from './ui/PostImage';
 export { AppButton } from './ui/AppButton';
 export { FormShell } from './ui/FormShell';
 export { FormField } from './ui/FormField';

@@ -1,17 +1,15 @@
-import { Box, Skeleton, Button, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import '@gouch/to-title-case';
 import { useNavigate, useMatchRoute } from '@tanstack/react-router';
 import { useQueryClient } from '@tanstack/react-query';
-import { getPostImageUrl, truncateAtWord } from '@/shared';
+import { truncateAtWord, PostImage } from '@/shared';
 import { newsQueries } from '../model/queries';
 import type { Post } from '../model/types';
 
 export function BigNewsCard({ post }: { post: Post; imgSeed?: string }) {
   const navigate = useNavigate();
   const matchRoute = useMatchRoute();
-  // const [loaded, setLoaded] = useState(false);
   const isPostDetailsPage = Boolean(matchRoute({ to: '/news/$postId' }));
-  const img = getPostImageUrl(post.id, 620, 409);
   const queryClient = useQueryClient();
 
   return (
@@ -24,38 +22,7 @@ export function BigNewsCard({ post }: { post: Post; imgSeed?: string }) {
         '&:hover': { opacity: 0.96 },
       }}
     >
-      <Box key={img} sx={{ position: 'relative', width: '100%', aspectRatio: 16 / 10 }}>
-        {!img && (
-          <Skeleton
-            variant="rectangular"
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              borderRadius: 0,
-              heigth: 620,
-            }}
-          />
-        )}
-        <Box
-          component="img"
-          src={img}
-          alt={post.title}
-          loading="lazy"
-          // onLoad={() => setLoaded(true)}
-          sx={{
-            width: '100%',
-            aspectRatio: 16 / 10,
-            objectFit: 'cover',
-            display: 'block',
-            flexGrow: '1',
-            // opacity: loaded ? 1 : 0,
-            // transition: 'opacity 100ms ease',
-          }}
-          onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-            e.currentTarget.src = `https://placehold.co/620x409/e8eaed/9aa0a6?text=No+Image`;
-          }}
-        />
-      </Box>
+      <PostImage key={post.id} postId={post.id} width={620} height={409} alt={post.title} eager />
       <Typography
         sx={{
           fontFamily: 'var(--third-family)',

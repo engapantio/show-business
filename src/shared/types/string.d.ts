@@ -1,4 +1,3 @@
-// src/shared/types/string.d.ts
 export {};
 
 declare global {

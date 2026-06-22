@@ -23,11 +23,6 @@ export function InspirationPage() {
     return (
       <PageContainer maxWidth="md">
         <NewsPageSkeleton />
-        {/* <Skeleton variant="rectangular" height={480} sx={{ borderRadius: 0, mb: 2 }} />
-        <Skeleton height={72} sx={{ mb: 2 }} />
-        <Skeleton height={32} sx={{ width: 180, mb: 4 }} />
-        <Skeleton height={120} />
-        <Skeleton height={120} /> */}
       </PageContainer>
     );
   }

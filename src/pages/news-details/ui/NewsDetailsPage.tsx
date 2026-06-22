@@ -1,16 +1,21 @@
-import { Suspense } from 'react';
 import { useParams } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { newsQueries, BigNewsCard } from '@/entities/news/';
 import { CommentsSection } from '@/widgets/comments-section/';
 import { NewsPageSkeleton } from '@/widgets/news-page-skeleton';
-import { AUTHOR_NAME } from '@/shared';
+import { AUTHOR_NAME, PageContainer } from '@/shared';
 
 function NewsDetailContent() {
   const { postId } = useParams({ from: '/news/$postId' });
   const id = Number(postId);
-  const { data: post } = useSuspenseQuery(newsQueries.detail(id));
+  const { data: post, isFetching, isLoading } = useSuspenseQuery(newsQueries.detail(id));
+
+  const isPostLoading = !post || isLoading || isFetching;
+
+  if (isPostLoading) {
+    return <SkeletonView />;
+  }
 
   return (
     <>
@@ -30,20 +35,14 @@ function SkeletonView() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <NewsPageSkeleton />
-      {/* <Skeleton variant="rectangular" height={480} sx={{ borderRadius: 2 }} />
-      <Skeleton height={48} />
-      <Skeleton height={24} width="85%" />
-      <Skeleton height={24} width="65%" /> */}
     </Box>
   );
 }
 
 export function NewsDetailsPage() {
   return (
-    <Container maxWidth="md" sx={{ py: { xs: 3, md: 5 } }}>
-      <Suspense fallback={<SkeletonView />}>
-        <NewsDetailContent />
-      </Suspense>
-    </Container>
+    <PageContainer maxWidth="md">
+      <NewsDetailContent />
+    </PageContainer>
   );
 }

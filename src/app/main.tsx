@@ -1,15 +1,14 @@
-// src/main.tsx
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@/app/providers/ThemeProvider.tsx';
 import { QueryProvider } from '@/app/providers/QueryProvider.tsx';
-// Import the generated route tree
 import { routeTree } from '../routeTree.gen.ts';
+import { queryClient } from '@/shared';
 
 // Create a new router instance
-const router = createRouter({ routeTree });
+const router = createRouter({ routeTree, context: { queryClient } });
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
