@@ -2,9 +2,10 @@ import { Box, Typography } from '@mui/material';
 import { Link } from '@tanstack/react-router';
 import '@gouch/to-title-case';
 import type { Post } from '../model/types';
+import { getPostImageUrl } from '@/shared';
 
 export function ExploreNewsCard({ post }: { post: Post }) {
-  const img = `https://picsum.photos/seed/post-${post.id}/290/242`;
+  const img = getPostImageUrl(post.id, 290, 242);
 
   return (
     <Link
@@ -34,6 +35,9 @@ export function ExploreNewsCard({ post }: { post: Post }) {
             height: 242,
             objectFit: 'cover',
             display: 'block',
+          }}
+          onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+            e.currentTarget.src = `https://placehold.co/290x242/e8eaed/9aa0a6?text=No+Image`;
           }}
         />
         <Typography

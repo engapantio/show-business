@@ -3,13 +3,13 @@ import SmsOutlineIcon from '@mui/icons-material/SmsOutlined';
 import { useNavigate } from '@tanstack/react-router';
 import '@gouch/to-title-case';
 import type { Post } from '../model/types';
-import { AUTHOR_NAME } from '@/shared/config/constants';
+import { AUTHOR_NAME, getPostImageUrl } from '@/shared';
 
 type TopStoryRowProps = { post: Post; index: number; commentsCount: number };
 
 export function TopStoryRow({ post, index, commentsCount }: TopStoryRowProps) {
   const navigate = useNavigate();
-  const thumb = `https://picsum.photos/seed/post-${post.id}/200/124`;
+  const thumb = getPostImageUrl(post.id, 200, 124);
 
   return (
     <Box
@@ -113,6 +113,9 @@ export function TopStoryRow({ post, index, commentsCount }: TopStoryRowProps) {
           objectFit: 'cover',
           borderRadius: 0,
           justifySelf: 'end',
+        }}
+        onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+          e.currentTarget.src = `https://placehold.co/200x124/e8eaed/9aa0a6?text=No+Image`;
         }}
       />
     </Box>

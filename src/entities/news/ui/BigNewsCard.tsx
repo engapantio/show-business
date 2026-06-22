@@ -2,16 +2,15 @@ import { useState } from 'react';
 import { Box, Skeleton, Button, Typography } from '@mui/material';
 import '@gouch/to-title-case';
 import { useNavigate, useMatchRoute } from '@tanstack/react-router';
-import { truncateAtWord } from '@/shared';
+import {getPostImageUrl, truncateAtWord } from '@/shared';
 import type { Post } from '../model/types';
 
-export function BigNewsCard({ post, imgSeed }: { post: Post; imgSeed?: string }) {
+export function BigNewsCard({ post }: { post: Post; imgSeed?: string }) {
   const navigate = useNavigate();
   const matchRoute = useMatchRoute();
   const [loaded, setLoaded] = useState(false);
   const isPostDetailsPage = Boolean(matchRoute({ to: '/news/$postId' }));
-  const seed = imgSeed ?? `post-${post.id}`;
-  const img = `https://picsum.photos/seed/${seed}/620/409`;
+  const img = getPostImageUrl(post.id, 620, 409);
 
   return (
     <Box
@@ -48,6 +47,9 @@ export function BigNewsCard({ post, imgSeed }: { post: Post; imgSeed?: string })
             flexGrow: '1',
             opacity: loaded ? 1 : 0,
             transition: 'opacity 180ms ease',
+          }}
+          onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+            e.currentTarget.src = `https://placehold.co/620x409/e8eaed/9aa0a6?text=No+Image`;
           }}
         />
       </Box>

@@ -1,9 +1,10 @@
-import { Box, Container, Typography, Paper, Stack } from '@mui/material';
+import { Box, Typography, Paper, Stack } from '@mui/material';
 import { ContactForm } from '@/features/contact-us';
+import { PageContainer } from '@/shared';
 
 export function ContactPage() {
   return (
-    <Container maxWidth="md" sx={{ py: { xs: 3, md: 5 } }}>
+    <PageContainer maxWidth="md" >
       <Paper
         elevation={0}
         sx={{ p: { xs: 3, md: 5 }, border: '1px solid', borderColor: 'divider', borderRadius: 3 }}
@@ -27,6 +28,6 @@ export function ContactPage() {
           <ContactForm />
         </Stack>
       </Paper>
-    </Container>
+    </PageContainer>
   );
 }

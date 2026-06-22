@@ -1,11 +1,11 @@
-import { Container, Box, Skeleton } from '@mui/material';
+import { Box, Skeleton } from '@mui/material';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { Suspense } from 'react';
 import { newsQueries } from '@/entities/news/model/queries';
 import { NewsBand } from '@/widgets/news-band/';
 import { Pagination } from '@/widgets/pagination/';
-import { PAGE_SIZE } from '@/shared/config/constants';
+import { PAGE_SIZE, PageContainer } from '@/shared';
 
 function HomeContent() {
   const { page = 1 } = useSearch({ from: '/' });
@@ -54,7 +54,7 @@ function SkeletonBand() {
 
 export function HomePage() {
   return (
-    <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
+    <PageContainer maxWidth="xl" >
       <Suspense
         fallback={
           <>
@@ -65,6 +65,6 @@ export function HomePage() {
       >
         <HomeContent />
       </Suspense>
-    </Container>
+    </PageContainer>
   );
 }

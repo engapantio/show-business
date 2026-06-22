@@ -1,15 +1,15 @@
 import { Suspense } from 'react';
 import { useParams } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Box, Container, Divider, Skeleton, Typography } from '@mui/material';
-import { newsQueries, BigNewsCard, CommentCard } from '@/entities/news/';
-import { AUTHOR_NAME } from '@/shared/config/constants';
+import { Box, Container, Skeleton, Typography } from '@mui/material';
+import { newsQueries, BigNewsCard } from '@/entities/news/';
+import { CommentsSection } from '@/widgets/comments-section/';
+import { AUTHOR_NAME } from '@/shared';
 
 function NewsDetailContent() {
   const { postId } = useParams({ from: '/news/$postId' });
   const id = Number(postId);
   const { data: post } = useSuspenseQuery(newsQueries.detail(id));
-  const { data: commentsData } = useSuspenseQuery(newsQueries.comments(id));
 
   return (
     <>
@@ -20,13 +20,7 @@ function NewsDetailContent() {
           {post.body}
         </Typography>
       </Box>
-      <Divider sx={{ my: 4 }} />
-      <Typography variant="h2" sx={{ mb: 3 }}>
-        Comments ({commentsData.total})
-      </Typography>
-      {commentsData.comments.map((comment) => (
-        <CommentCard key={comment.id} comment={comment} />
-      ))}
+      <CommentsSection postId={id} />
     </>
   );
 }

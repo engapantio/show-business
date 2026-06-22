@@ -20,10 +20,10 @@ export function TopStoriesBlock({ posts }: { posts: Post[] }) {
         sx={{
           fontFamily: 'var(--font-family)',
           fontWeight: 700,
-          fontSize: 14,
-          textTransform: 'uppercase',
-          color: 'main.primary',
-          letterSpacing: '0.08em',
+          fontSize: 16,
+          color: 'primary.main',
+          lineHeight: 1.4,
+          ml: 6,
         }}
       >
         Top Stories
