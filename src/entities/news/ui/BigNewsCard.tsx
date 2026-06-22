@@ -9,7 +9,8 @@ import type { Post } from '../model/types';
 export function BigNewsCard({ post }: { post: Post; imgSeed?: string }) {
   const navigate = useNavigate();
   const matchRoute = useMatchRoute();
-  const isPostDetailsPage = Boolean(matchRoute({ to: '/news/$postId' }));
+  const isNewsDetailsPage = Boolean(matchRoute({ to: '/news/$postId' }));
+  const isInspirationPage = Boolean(matchRoute({ to: '/inspiration' }));
   const queryClient = useQueryClient();
 
   return (
@@ -22,7 +23,7 @@ export function BigNewsCard({ post }: { post: Post; imgSeed?: string }) {
         '&:hover': { opacity: 0.96 },
       }}
     >
-      <PostImage key={post.id} postId={post.id} width={620} height={409} alt={post.title} eager />
+      <PostImage key={post.id} postId={post.id} width={620} height={isNewsDetailsPage || isInspirationPage ? 259 : 409} alt={post.title} eager />
       <Typography
         sx={{
           fontFamily: 'var(--third-family)',
@@ -37,7 +38,7 @@ export function BigNewsCard({ post }: { post: Post; imgSeed?: string }) {
       >
         {truncateAtWord(post.title.toTitleCase(), 34)}
       </Typography>
-      {!isPostDetailsPage && (
+      {!isNewsDetailsPage && (
         <Box
           sx={{
             display: 'flex',

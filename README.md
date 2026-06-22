@@ -1,73 +1,146 @@
-# React + TypeScript + Vite
+# Show Business
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive news-browsing SPA built with React 19, TypeScript, and Material UI. Content is sourced from the public [DummyJSON](https://dummyjson.com) API. The project follows **Feature-Sliced Design (FSD)** and demonstrates clean separation of presentation and business logic throughout.
 
-Currently, two official plugins are available:
+***
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+| Page | Route | Description |
+|------|-------|-------------|
+| **Home** | `/` | Paginated news feed arranged in two alternating "band" layouts (large feature card + four top-story rows). Supports URL-based pagination (`?page=N`). |
+| **Explore** | `/explore` | Debounced search across all posts with a responsive 4-column card grid. Displays a randomised selection when the search field is empty. |
+| **Inspiration** | `/inspiration` | Surfaces a random post as a full-width feature card. The *Next Inspiration* button loads a new random post; hovering the button prefetches the next one. |
+| **News detail** | `/news/:id` | Individual post view with full body text and a comments section. |
+| **Contact** | `/contact` | Validated contact form (name, email, message) with Zod schema validation and TanStack Query mutation. |
+| **Login / Register** | `/login`, `/register` | Authentication forms with field-level validation, password visibility toggle, and redirect-on-success. |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Cross-cutting behaviour**
 
-## Expanding the ESLint configuration
+- Skeleton shimmer on every data-loading state; graceful error fallback on broken images.
+- Smooth image fade-in (`opacity 0 → 1`) via a shared `PostImage` component that also resets correctly on navigation.
+- Auth state persisted in a global store; protected routes redirect unauthenticated users to `/login?redirect=…`.
+- Fully adaptive layout — single-column on mobile, multi-column grid on tablet and desktop.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+***
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Tech stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Runtime dependencies
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+| Package | Version | Role |
+|---------|---------|------|
+| `react` / `react-dom` | ^19.2 | UI framework |
+| `@mui/material` | ^9.1 | Component library and theming |
+| `@mui/icons-material` | ^9.1 | Icon set |
+| `@emotion/react` / `@emotion/styled` | ^11.14 | MUI peer — CSS-in-JS engine |
+| `@tanstack/react-router` | ^1.170 | Type-safe file-based routing |
+| `@tanstack/react-router-devtools` | ^1.167 | Router dev overlay |
+| `@tanstack/react-query` | ^5.101 | Server-state management, caching, mutations |
+| `zod` | ^4.4 | Runtime schema validation for forms |
+| `@gouch/to-title-case` | ^2.2 | Title-case utility for post headings |
+
+### Dev dependencies
+
+| Package | Version | Role |
+|---------|---------|------|
+| `vite` | ^8.0 | Build tool and dev server |
+| `@vitejs/plugin-react` | ^6.0 | Vite React plugin (SWC transform) |
+| `@tanstack/router-plugin` | ^1.168 | Vite plugin for route-tree code generation |
+| `typescript` | ~6.0 | Type checking (`strict` mode, no `any`) |
+| `eslint` + `typescript-eslint` | ^10 / ^8.59 | Linting |
+| `eslint-plugin-react-hooks` | ^7.1 | Hooks rules enforcement |
+| `prettier` | ^3.8 | Code formatting |
+
+***
+
+## Project structure
+
+The codebase follows [Feature-Sliced Design](https://feature-sliced.design):
+
+```
+src/
+├── app/                    # App entry, providers (Theme, Query, Router)
+│   ├── providers/
+│   └── main.tsx
+├── routes/                 # TanStack Router file-based route definitions
+│   └── news/
+├── pages/                  # Page-level components (ui + model per page)
+│   ├── home/
+│   ├── news-details/
+│   ├── explore/
+│   ├── inspiration/
+│   ├── contact/
+│   ├── login/
+│   ├── register/
+│   └── not-found/
+├── widgets/                # Composite UI blocks (Header, NewsBand, AuthLayout, CommentsSection …)
+├── features/               # User-facing interactions (auth-by-username, contact-us)
+├── entities/               # Domain models + API queries (news)
+│   └── news/
+├── shared/                 # Reusable utilities, UI primitives, API client
+│   ├── api/
+│   ├── config/
+│   ├── lib/                # useDebounce, shuffle …
+│   ├── ui/                 # PostImage, PageContainer, Pagination …
+│   └── types/
+└── routeTree.gen.ts        # Auto-generated by @tanstack/router-plugin (do not edit)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Each slice exposes a public barrel (`index.ts`) and is internally divided into `ui/`, `model/`, and `api/` segments. Pages contain only presentation components; all state and query logic lives in co-located `model/` hooks.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+***
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+## Getting started
+
+### Prerequisites
+
+- **Node.js** ≥ 20
+- **npm** ≥ 10 (or pnpm / yarn — no lock-file conflicts)
+
+### Install
+
+```bash
+git clone https://github.com/engapantio/show-business.git
+cd show-business
+npm install
 ```
+
+### Run in development
+
+```bash
+npm run dev
+```
+
+Opens at `http://localhost:5173` by default. The TanStack Router Vite plugin watches `src/routes/**` and regenerates `routeTree.gen.ts` automatically on route file changes.
+
+### Build for production
+
+```bash
+npm run build       # type-check + Vite bundle
+npm run preview     # serve the dist/ folder locally
+```
+
+### Code quality
+
+```bash
+npm run lint        # ESLint (report only)
+npm run lint:fix    # ESLint with auto-fix
+npm run format      # Prettier check
+npm run format:fix  # Prettier auto-format
+```
+
+***
+
+## Environment
+
+No environment variables are required. All data comes from the public `https://dummyjson.com` REST API — the app works offline-first via TanStack Query's built-in cache once initial data has been fetched.
+
+***
+
+## Coding conventions
+
+- **TypeScript strict mode** — `any` is prohibited; all components, hooks, and API responses are explicitly typed.
+- **Presentation / logic separation** — every page that owns state exposes a dedicated `model/use<PageName>.ts` hook; page components contain only JSX and event bindings.
+- **No direct `fetch` in components** — all remote data goes through TanStack Query hooks defined in `entities/*/api` or `features/*/api`.
+- **FSD import rules** — upper layers may import from lower layers only (`pages → widgets → features → entities → shared`); cross-slice imports at the same layer are forbidden.
