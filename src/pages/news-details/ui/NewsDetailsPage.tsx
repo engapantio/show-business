@@ -1,9 +1,10 @@
 import { Suspense } from 'react';
 import { useParams } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Box, Container, Skeleton, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import { newsQueries, BigNewsCard } from '@/entities/news/';
 import { CommentsSection } from '@/widgets/comments-section/';
+import { NewsPageSkeleton } from '@/widgets/news-page-skeleton';
 import { AUTHOR_NAME } from '@/shared';
 
 function NewsDetailContent() {
@@ -28,10 +29,11 @@ function NewsDetailContent() {
 function SkeletonView() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <Skeleton variant="rectangular" height={480} sx={{ borderRadius: 2 }} />
+      <NewsPageSkeleton />
+      {/* <Skeleton variant="rectangular" height={480} sx={{ borderRadius: 2 }} />
       <Skeleton height={48} />
       <Skeleton height={24} width="85%" />
-      <Skeleton height={24} width="65%" />
+      <Skeleton height={24} width="65%" /> */}
     </Box>
   );
 }

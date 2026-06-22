@@ -4,7 +4,7 @@ import { PageContainer } from '@/shared';
 
 export function ContactPage() {
   return (
-    <PageContainer maxWidth="md" >
+    <PageContainer maxWidth="md">
       <Paper
         elevation={0}
         sx={{ p: { xs: 3, md: 5 }, border: '1px solid', borderColor: 'divider', borderRadius: 3 }}

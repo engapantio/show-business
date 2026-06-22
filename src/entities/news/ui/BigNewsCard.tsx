@@ -1,16 +1,18 @@
-import { useState } from 'react';
 import { Box, Skeleton, Button, Typography } from '@mui/material';
 import '@gouch/to-title-case';
 import { useNavigate, useMatchRoute } from '@tanstack/react-router';
-import {getPostImageUrl, truncateAtWord } from '@/shared';
+import { useQueryClient } from '@tanstack/react-query';
+import { getPostImageUrl, truncateAtWord } from '@/shared';
+import { newsQueries } from '../model/queries';
 import type { Post } from '../model/types';
 
 export function BigNewsCard({ post }: { post: Post; imgSeed?: string }) {
   const navigate = useNavigate();
   const matchRoute = useMatchRoute();
-  const [loaded, setLoaded] = useState(false);
+  // const [loaded, setLoaded] = useState(false);
   const isPostDetailsPage = Boolean(matchRoute({ to: '/news/$postId' }));
   const img = getPostImageUrl(post.id, 620, 409);
+  const queryClient = useQueryClient();
 
   return (
     <Box
@@ -23,13 +25,14 @@ export function BigNewsCard({ post }: { post: Post; imgSeed?: string }) {
       }}
     >
       <Box key={img} sx={{ position: 'relative', width: '100%', aspectRatio: 16 / 10 }}>
-        {!loaded && (
+        {!img && (
           <Skeleton
-            variant="circular"
+            variant="rectangular"
             sx={{
               position: 'absolute',
               inset: 0,
               borderRadius: 0,
+              heigth: 620,
             }}
           />
         )}
@@ -38,15 +41,15 @@ export function BigNewsCard({ post }: { post: Post; imgSeed?: string }) {
           src={img}
           alt={post.title}
           loading="lazy"
-          onLoad={() => setLoaded(true)}
+          // onLoad={() => setLoaded(true)}
           sx={{
             width: '100%',
             aspectRatio: 16 / 10,
             objectFit: 'cover',
             display: 'block',
             flexGrow: '1',
-            opacity: loaded ? 1 : 0,
-            transition: 'opacity 180ms ease',
+            // opacity: loaded ? 1 : 0,
+            // transition: 'opacity 100ms ease',
           }}
           onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
             e.currentTarget.src = `https://placehold.co/620x409/e8eaed/9aa0a6?text=No+Image`;
@@ -96,6 +99,8 @@ export function BigNewsCard({ post }: { post: Post; imgSeed?: string }) {
             variant="contained"
             sx={{ flexShrink: 0, alignSelf: 'flex-end', whiteSpace: 'nowrap', py: 0.25, px: 0.75 }}
             onClick={() => navigate({ to: '/news/$postId', params: { postId: String(post.id) } })}
+            onMouseEnter={() => queryClient.prefetchQuery(newsQueries.detail(post.id))}
+            onFocus={() => queryClient.prefetchQuery(newsQueries.detail(post.id))}
           >
             Read more
           </Button>

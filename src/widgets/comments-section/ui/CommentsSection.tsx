@@ -2,7 +2,9 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { Divider, Typography } from '@mui/material';
 import { CommentCard, newsQueries } from '@/entities/news';
 
-interface CommentsSectionProps { postId: number }
+interface CommentsSectionProps {
+  postId: number;
+}
 
 export function CommentsSection({ postId }: CommentsSectionProps) {
   const commentsQuery = useSuspenseQuery(newsQueries.comments(postId));

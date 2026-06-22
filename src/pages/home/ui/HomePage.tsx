@@ -54,7 +54,7 @@ function SkeletonBand() {
 
 export function HomePage() {
   return (
-    <PageContainer maxWidth="xl" >
+    <PageContainer maxWidth="xl">
       <Suspense
         fallback={
           <>
