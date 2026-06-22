@@ -1,10 +1,9 @@
-import { useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { Box, InputAdornment, TextField, Typography, Skeleton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { newsQueries, ExploreNewsCard } from '@/entities/news/';
+import { ExploreNewsCard } from '@/entities/news/';
 import { Pagination } from '@/widgets/pagination';
-import { shuffle, useDebounce, PAGE_SIZE, PageContainer } from '@/shared/';
+import { PageContainer } from '@/shared/';
+import { useExploreNews } from '../model/useExploreNews';
 
 const cardGridSx = {
   display: 'grid',
@@ -15,26 +14,16 @@ const cardGridSx = {
 } as const;
 
 export function ExplorePage() {
-  const [inputValue, setInputValue] = useState('');
-  const [page, setPage] = useState(1);
-  const debouncedQuery = useDebounce(inputValue.trim(), 900);
-  const isSearching = debouncedQuery.length > 0;
-  const { data: listData, isLoading: isListLoading } = useQuery(newsQueries.listAll());
-  const { data: searchData, isLoading: isSearchLoading } = useQuery(
-    newsQueries.search(debouncedQuery, page),
-  );
-
-  const initialPosts = useMemo(() => {
-    const posts = listData?.posts ?? [];
-    return shuffle(posts).slice(0, 8);
-  }, [listData?.posts]);
-
-  const searchPosts = searchData?.posts ?? [];
-  const searchPostsCountDivisibleBy4 = Math.floor(searchPosts.length / 4) * 4;
-
-  const posts = isSearching ? searchPosts.slice(0, searchPostsCountDivisibleBy4) : initialPosts;
-  const isLoading = isSearching ? isSearchLoading : isListLoading;
-  const totalPages = searchData ? Math.ceil(searchData.total / PAGE_SIZE) : 1;
+  const {
+    inputValue,
+    page,
+    posts,
+    isLoading,
+    isSearching,
+    totalPages,
+    handleQueryChange,
+    handlePageChange,
+  } = useExploreNews();
 
   return (
     <PageContainer maxWidth="xl">
@@ -62,8 +51,7 @@ export function ExplorePage() {
           placeholder="Search news..."
           value={inputValue}
           onChange={(e) => {
-            setInputValue(e.target.value);
-            setPage(1);
+            handleQueryChange(e.target.value);
           }}
           slotProps={{
             input: {
@@ -103,8 +91,8 @@ export function ExplorePage() {
           ))}
         </Box>
       )}
-      {!isSearching && !!searchData && searchData.total > PAGE_SIZE && (
-        <Pagination page={page} totalPages={totalPages} onChange={setPage} />
+      {!isSearching && totalPages > 1 && (
+        <Pagination page={page} totalPages={totalPages} onChange={handlePageChange} />
       )}
     </PageContainer>
   );

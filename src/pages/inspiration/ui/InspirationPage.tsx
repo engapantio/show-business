@@ -1,25 +1,15 @@
-import { useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Box, Button, Typography } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import { newsQueries, BigNewsCard } from '@/entities/news/';
+import { BigNewsCard } from '@/entities/news/';
 import { AUTHOR_NAME, PageContainer } from '@/shared';
 import { CommentsSection } from '@/widgets/comments-section';
 import { NewsPageSkeleton } from '@/widgets/news-page-skeleton';
+import { useInspiration } from '../model/useInspiration';
 
 export function InspirationPage() {
-  const [randomId, setRandomId] = useState<number>(() => Math.ceil(Math.random() * 150));
+  const { post, currentId, isLoading, handleShuffle, handlePrefetchNext } = useInspiration();
 
-  const postQuery = useQuery(newsQueries.detail(randomId));
-  const queryClient = useQueryClient();
-
-  const handleShuffle = () => {
-    setRandomId(Math.ceil(Math.random() * 150));
-  };
-
-  const isPostLoading = !postQuery.data || postQuery.isLoading || postQuery.isFetching;
-
-  if (isPostLoading) {
+  if (isLoading || !post) {
     return (
       <PageContainer maxWidth="md">
         <NewsPageSkeleton />
@@ -29,7 +19,7 @@ export function InspirationPage() {
 
   return (
     <PageContainer maxWidth="md">
-      <BigNewsCard post={postQuery.data} />
+      <BigNewsCard key={currentId} post={post} />
       <Box
         sx={{
           display: 'flex',
@@ -44,13 +34,13 @@ export function InspirationPage() {
           variant="contained"
           onClick={handleShuffle}
           startIcon={<AutoAwesomeIcon />}
-          onMouseEnter={() => queryClient.prefetchQuery(newsQueries.detail(randomId))}
-          onFocus={() => queryClient.prefetchQuery(newsQueries.detail(randomId))}
+          onMouseEnter={handlePrefetchNext}
+          onFocus={handlePrefetchNext}
         >
           Next inspiration
         </Button>
       </Box>
-      <CommentsSection postId={randomId} />
+      <CommentsSection postId={currentId} />
     </PageContainer>
   );
 }

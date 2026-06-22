@@ -6,6 +6,7 @@ import { newsQueries } from '@/entities/news/model/queries';
 import { NewsBand } from '@/widgets/news-band/';
 import { Pagination } from '@/widgets/pagination/';
 import { PAGE_SIZE, PageContainer } from '@/shared';
+import { sliceNewsBands } from '../model/useNewsBands';
 
 function HomeContent() {
   const { page = 1 } = useSearch({ from: '/' });
@@ -14,15 +15,11 @@ function HomeContent() {
   const posts = data.posts;
   const totalPages = Math.ceil(data.total / PAGE_SIZE);
 
-  const band1Big = posts[0];
-  const band1Top = posts.slice(1, 5);
-  const band2Big = posts[5];
-  const band2Top = posts.slice(6, 10);
-
+  const [band1, band2] = sliceNewsBands(posts);
   return (
     <>
-      {band1Big && <NewsBand bigPost={band1Big} topPosts={band1Top} />}
-      {band2Big && <NewsBand bigPost={band2Big} topPosts={band2Top} reversed />}
+      {band1 && <NewsBand bigPost={band1.big} topPosts={band1.top} />}
+      {band2 && <NewsBand bigPost={band2.big} topPosts={band2.top} reversed />}
       <Pagination
         page={page}
         totalPages={totalPages}
