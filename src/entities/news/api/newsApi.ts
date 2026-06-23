@@ -11,6 +11,4 @@ export const newsApi = {
     apiGet<PostsResponse>(`/posts/search?q=${encodeURIComponent(q)}&limit=${limit}&skip=${skip}`),
 
   getComments: (postId: number) => apiGet<CommentsResponse>(`/posts/${postId}/comments?limit=30`),
-
-  getRandomPost: () => apiGet<Post>(`/posts/${Math.ceil(Math.random() * 150)}`),
 };

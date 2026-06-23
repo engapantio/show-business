@@ -20,6 +20,7 @@ export function ExplorePage() {
     posts,
     isLoading,
     isSearching,
+    isEmpty,
     totalPages,
     handleQueryChange,
     handlePageChange,
@@ -90,6 +91,11 @@ export function ExplorePage() {
             <ExploreNewsCard key={post.id} post={post} />
           ))}
         </Box>
+      )}
+      {isEmpty && (
+        <Typography variant="body1" sx={{ textAlign: 'center', color: 'text.secondary', py: 8 }}>
+          No results for &ldquo;{inputValue}&rdquo;
+        </Typography>
       )}
       {!isSearching && totalPages > 1 && (
         <Pagination page={page} totalPages={totalPages} onChange={handlePageChange} />

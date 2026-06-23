@@ -10,11 +10,13 @@ export interface UseContactFormReturn {
   fieldErrors: FieldErrors<ContactFields>;
   isPending: boolean;
   isError: boolean;
+  isSubmitted: boolean;
   error: Error | null;
   handleChange: (
     field: ContactFields,
   ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleSubmit: (e: React.SubmitEvent<HTMLFormElement>) => void;
+  handleReset: () => void;
 }
 
 const INITIAL_VALUES: ContactFormValues = { name: '', email: '', message: '' };
@@ -22,6 +24,7 @@ const INITIAL_VALUES: ContactFormValues = { name: '', email: '', message: '' };
 export function useContactForm(): UseContactFormReturn {
   const [values, setValues] = useState<ContactFormValues>(INITIAL_VALUES);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors<ContactFields>>({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const { mutate, isPending, isError, error, reset } = useContactSubmitMutation();
 
   const handleChange =
@@ -39,12 +42,27 @@ export function useContactForm(): UseContactFormReturn {
     setFieldErrors({});
     mutate(result.data, {
       onSuccess: () => {
-        setValues(INITIAL_VALUES);
-        setFieldErrors({});
-        reset();
+        setIsSubmitted(true);
       },
     });
   };
 
-  return { values, fieldErrors, isPending, isError, error, handleChange, handleSubmit };
+  const handleReset = (): void => {
+    setValues(INITIAL_VALUES);
+    setFieldErrors({});
+    setIsSubmitted(false);
+    reset();
+  };
+
+  return {
+    values,
+    fieldErrors,
+    isPending,
+    isError,
+    isSubmitted,
+    error,
+    handleChange,
+    handleSubmit,
+    handleReset,
+  };
 }

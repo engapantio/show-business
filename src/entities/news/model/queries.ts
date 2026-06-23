@@ -3,11 +3,14 @@ import { newsApi } from '../api/newsApi';
 import { commentsApi } from '../api/commentsApi';
 import { PAGE_SIZE } from '@/shared/config/constants';
 
+const LIST_STALE_MS = 60_000;
+
 export const newsQueries = {
   list: (page: number) =>
     queryOptions({
       queryKey: ['posts', 'list', page],
       queryFn: () => newsApi.getPosts(PAGE_SIZE, (page - 1) * PAGE_SIZE),
+      staleTime: LIST_STALE_MS,
     }),
 
   listAll: () =>
@@ -21,12 +24,14 @@ export const newsQueries = {
     queryOptions({
       queryKey: ['posts', 'detail', id],
       queryFn: () => newsApi.getPost(id),
+      staleTime: LIST_STALE_MS,
     }),
 
   comments: (postId: number) =>
     queryOptions({
       queryKey: ['posts', 'comments', postId],
       queryFn: () => newsApi.getComments(postId),
+      staleTime: LIST_STALE_MS,
     }),
 
   search: (q: string, page: number) =>
