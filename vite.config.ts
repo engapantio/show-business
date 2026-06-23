@@ -26,6 +26,9 @@ export default defineConfig({
           if (id.includes('@tanstack')) {
             return 'tanstack';
           }
+          if (id.includes('zod')) {
+            return 'schemas';
+          }
         },
       },
     },
