@@ -17,6 +17,7 @@ export function NewsBand({
       sx={{
         display: 'flex',
         flexDirection: { xs: 'column', md: reversed ? 'row-reverse' : 'row' },
+        alignItems: 'stretch',
         gap: 4,
         py: { xs: 4, md: 5 },
       }}

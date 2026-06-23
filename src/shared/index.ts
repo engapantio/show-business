@@ -8,6 +8,7 @@ export { useDebounce } from './lib/useDebounce';
 export { AUTHOR_NAME, PAGE_SIZE } from './config/constants';
 export { theme } from './ui/theme';
 export { PageContainer } from './ui/PageContainer';
+export { ErrorView } from './ui/ErrorView';
 export { Logo } from './ui/Logo';
 export { PostImage } from './ui/PostImage';
 export { AppButton } from './ui/AppButton';

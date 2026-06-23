@@ -1,5 +1,5 @@
 import { useParams } from '@tanstack/react-router';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Box, Typography } from '@mui/material';
 import { newsQueries, BigNewsCard } from '@/entities/news/';
 import { CommentsSection } from '@/widgets/comments-section/';
@@ -9,7 +9,7 @@ import { AUTHOR_NAME, PageContainer } from '@/shared';
 function NewsDetailContent() {
   const { postId } = useParams({ from: '/news/$postId' });
   const id = Number(postId);
-  const { data: post, isFetching, isLoading } = useSuspenseQuery(newsQueries.detail(id));
+  const { data: post, isFetching, isLoading } = useQuery(newsQueries.detail(id));
 
   const isPostLoading = !post || isLoading || isFetching;
 

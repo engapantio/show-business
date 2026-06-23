@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
+import { useTheme, useMediaQuery } from '@mui/material';
 import { useAuthState, logout } from '@/features/auth-by-username';
 
 export interface UseHeaderReturn {
@@ -15,11 +16,16 @@ export function useHeader(): UseHeaderReturn {
   const auth = useAuthState();
   const navigate = useNavigate();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [drawerRequested, setDrawerRequested] = useState(false);
+
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('sm'));
+
+  const isDrawerOpen = drawerRequested && !isDesktop;
 
   const handleLogout = () => {
     setIsCheckingOut(true);
-    setIsDrawerOpen(false);
+    setDrawerRequested(false);
     setTimeout(() => {
       logout();
       navigate({ to: '/login', search: {} });
@@ -31,8 +37,8 @@ export function useHeader(): UseHeaderReturn {
     isAuthenticated: Boolean(auth.token),
     isCheckingOut,
     isDrawerOpen,
-    openDrawer: () => setIsDrawerOpen(true),
-    closeDrawer: () => setIsDrawerOpen(false),
+    openDrawer: () => setDrawerRequested(true),
+    closeDrawer: () => setDrawerRequested(false),
     handleLogout,
   };
 }

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Skeleton } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
 import { getPostImageUrl } from '@/shared';
+import { getCachedImageUrl, setCachedImageUrl } from '@/shared/lib/resolvedImageCache';
 
 interface PostImageProps {
   postId: number;
@@ -9,25 +10,36 @@ interface PostImageProps {
   height: number;
   alt: string;
   eager?: boolean;
+  fill?: boolean;
   sx?: SxProps<Theme>;
 }
 
-export function PostImage({ postId, width, height, alt, eager = false, sx }: PostImageProps) {
+const PLACEHOLDER = '/placeholder.svg';
+
+export function PostImage({
+  postId,
+  width,
+  height,
+  alt,
+  fill = false,
+  eager = false,
+  sx,
+}: PostImageProps) {
   const [loaded, setLoaded] = useState(false);
   const [errored, setErrored] = useState(false);
 
-  const src = errored
-    ? `https://placehold.co/${width}x${height}/e8eaed/9aa0a6?text=No+Image`
-    : getPostImageUrl(postId, width, height);
+  const originalSrc = getPostImageUrl(postId, width, height);
+  const src = errored ? PLACEHOLDER : getCachedImageUrl(originalSrc);
 
   return (
     <Box
       sx={{
         position: 'relative',
-        width: '100%',
-        aspectRatio: `${width} / ${height}`,
         overflow: 'hidden',
         bgcolor: 'action.hover',
+        ...(fill
+          ? { width: '100%', height: '100%' }
+          : { width: '100%', aspectRatio: `${width} / ${height}` }),
         ...sx,
       }}
     >
@@ -43,8 +55,15 @@ export function PostImage({ postId, width, height, alt, eager = false, sx }: Pos
         src={src}
         alt={alt}
         loading={eager ? 'eager' : 'lazy'}
+        fetchPriority={eager ? 'high' : 'auto'}
         decoding="async"
-        onLoad={() => setLoaded(true)}
+        onLoad={(e: React.SyntheticEvent<HTMLImageElement>) => {
+          const resolvedSrc = e.currentTarget.currentSrc;
+          if (resolvedSrc && resolvedSrc !== originalSrc) {
+            setCachedImageUrl(originalSrc, resolvedSrc);
+          }
+          setLoaded(true);
+        }}
         onError={() => {
           setErrored(true);
           setLoaded(true);

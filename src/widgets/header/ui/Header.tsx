@@ -2,6 +2,8 @@ import { Box, Container, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonOutlineIcon from '@mui/icons-material/Person2Outlined';
 import { Link, useLocation } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
+import { newsQueries } from '@/entities/news';
 import { Logo, AppButton } from '@/shared';
 import { useHeader } from '../model/useHeader';
 import { NavDrawer } from './NavDrawer';
@@ -11,6 +13,8 @@ export function Header() {
   const location = useLocation();
   const { isAuthenticated, isCheckingOut, isDrawerOpen, openDrawer, closeDrawer, handleLogout } =
     useHeader();
+
+  const queryClient = useQueryClient();
 
   return (
     <Box
@@ -40,6 +44,7 @@ export function Header() {
         >
           {NAV.map((item) => (
             <Box
+              onMouseEnter={() => queryClient.prefetchQuery(newsQueries.listAll())}
               key={item.to}
               component={Link}
               to={item.to}

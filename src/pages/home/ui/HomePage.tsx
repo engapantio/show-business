@@ -1,12 +1,14 @@
 import { Box, Skeleton } from '@mui/material';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery, useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { newsQueries } from '@/entities/news/model/queries';
 import { NewsBand } from '@/widgets/news-band/';
 import { Pagination } from '@/widgets/pagination/';
-import { PAGE_SIZE, PageContainer } from '@/shared';
+import { PAGE_SIZE, PageContainer, ErrorView } from '@/shared';
 import { sliceNewsBands } from '../model/useNewsBands';
+import { usePreloadHomeImages } from '../model/usePreloadImages';
 
 function HomeContent() {
   const { page = 1 } = useSearch({ from: '/' });
@@ -14,8 +16,10 @@ function HomeContent() {
   const { data } = useSuspenseQuery(newsQueries.list(page));
   const posts = data.posts;
   const totalPages = Math.ceil(data.total / PAGE_SIZE);
-
   const [band1, band2] = sliceNewsBands(posts);
+
+  usePreloadHomeImages(posts);
+
   return (
     <>
       {band1 && <NewsBand bigPost={band1.big} topPosts={band1.top} />}
@@ -50,18 +54,27 @@ function SkeletonBand() {
 }
 
 export function HomePage() {
+  const { reset } = useQueryErrorResetBoundary();
+
   return (
     <PageContainer maxWidth="xl">
-      <Suspense
-        fallback={
-          <>
-            <SkeletonBand />
-            <SkeletonBand />
-          </>
-        }
+      <ErrorBoundary
+        onReset={reset}
+        fallbackRender={({ resetErrorBoundary }) => (
+          <ErrorView message="Failed to load news." onRetry={resetErrorBoundary} />
+        )}
       >
-        <HomeContent />
-      </Suspense>
+        <Suspense
+          fallback={
+            <>
+              <SkeletonBand />
+              <SkeletonBand />
+            </>
+          }
+        >
+          <HomeContent />
+        </Suspense>
+      </ErrorBoundary>
     </PageContainer>
   );
 }

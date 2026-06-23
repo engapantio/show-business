@@ -6,14 +6,14 @@ A responsive news-browsing SPA built with React 19, TypeScript, and Material UI.
 
 ## Features
 
-| Page | Route | Description |
-|------|-------|-------------|
-| **Home** | `/` | Paginated news feed arranged in two alternating "band" layouts (large feature card + four top-story rows). Supports URL-based pagination (`?page=N`). |
-| **Explore** | `/explore` | Debounced search across all posts with a responsive 4-column card grid. Displays a randomised selection when the search field is empty. |
-| **Inspiration** | `/inspiration` | Surfaces a random post as a full-width feature card. The *Next Inspiration* button loads a new random post; hovering it prefetches the next one. Protected route — requires login. |
-| **News detail** | `/news/:id` | Individual post view with full body text and a comments section. |
-| **Contact** | `/contact` | Validated contact form (name, email, message) with Zod schema validation and TanStack Query mutation. |
-| **Login / Register** | `/login`, `/register` | Authentication forms with field-level validation, password visibility toggle, and redirect-on-success. |
+| Page                 | Route                 | Description                                                                                                                                                                        |
+| -------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Home**             | `/`                   | Paginated news feed arranged in two alternating "band" layouts (large feature card + four top-story rows). Supports URL-based pagination (`?page=N`).                              |
+| **Explore**          | `/explore`            | Debounced search across all posts with a responsive 4-column card grid. Displays a randomised selection when the search field is empty.                                            |
+| **Inspiration**      | `/inspiration`        | Surfaces a random post as a full-width feature card. The _Next Inspiration_ button loads a new random post; hovering it prefetches the next one. Protected route — requires login. |
+| **News detail**      | `/news/:id`           | Individual post view with full body text and a comments section.                                                                                                                   |
+| **Contact**          | `/contact`            | Validated contact form (name, email, message) with Zod schema validation and TanStack Query mutation.                                                                              |
+| **Login / Register** | `/login`, `/register` | Authentication forms with field-level validation, password visibility toggle, and redirect-on-success.                                                                             |
 
 **Cross-cutting behaviour**
 
@@ -34,30 +34,32 @@ A responsive news-browsing SPA built with React 19, TypeScript, and Material UI.
 
 ### Runtime dependencies
 
-| Package | Version | Role |
-|---------|---------|------|
-| `react` / `react-dom` | ^19.2 | UI framework |
-| `@mui/material` | ^9.1 | Component library and theming |
-| `@mui/icons-material` | ^9.1 | Icon set |
-| `@emotion/react` / `@emotion/styled` | ^11.14 | MUI peer — CSS-in-JS engine |
-| `@tanstack/react-router` | ^1.170 | Type-safe file-based routing |
-| `@tanstack/react-router-devtools` | ^1.167 | Router dev overlay |
-| `@tanstack/react-query` | ^5.101 | Server-state management, caching, mutations |
-| `react-error-boundary` | ^5.x | Declarative error boundaries with query reset support |
-| `zod` | ^4.4 | Runtime schema validation for forms |
-| `@gouch/to-title-case` | ^2.2 | Title-case utility for post headings |
+| Package                              | Version | Role                                                  |
+| ------------------------------------ | ------- | ----------------------------------------------------- |
+| `react` / `react-dom`                | ^19.2   | UI framework                                          |
+| `@mui/material`                      | ^9.1    | Component library and theming                         |
+| `@mui/icons-material`                | ^9.1    | Icon set                                              |
+| `@emotion/react` / `@emotion/styled` | ^11.14  | MUI peer — CSS-in-JS engine                           |
+| `@tanstack/react-router`             | ^1.170  | Type-safe file-based routing                          |
+| `@tanstack/react-router-devtools`    | ^1.167  | Router dev overlay                                    |
+| `@tanstack/react-query`              | ^5.101  | Server-state management, caching, mutations           |
+| `react-error-boundary`               | ^5.x    | Declarative error boundaries with query reset support |
+| `zod`                                | ^4.4    | Runtime schema validation for forms                   |
+| `@gouch/to-title-case`               | ^2.2    | Title-case utility for post headings                  |
 
 ### Dev dependencies
 
-| Package | Version | Role |
-|---------|---------|------|
-| `vite` | ^8.0 | Build tool and dev server |
-| `@vitejs/plugin-react` | ^6.0 | Vite React plugin (SWC transform) |
-| `@tanstack/router-plugin` | ^1.168 | Vite plugin for route-tree code generation |
-| `typescript` | ~6.0 | Type checking (`strict` mode, no `any`) |
-| `eslint` + `typescript-eslint` | ^10 / ^8.59 | Linting |
-| `eslint-plugin-react-hooks` | ^7.1 | Hooks rules enforcement |
-| `prettier` | ^3.8 | Code formatting |
+| Package                        | Version     | Role                                       |
+| ------------------------------ | ----------- | ------------------------------------------ |
+| `vite`                         | ^8.0        | Build tool and dev server                  |
+| `@vitejs/plugin-react`         | ^6.0        | Vite React plugin (SWC transform)          |
+| `@tanstack/router-plugin`      | ^1.168      | Vite plugin for route-tree code generation |
+| `typescript`                   | ~6.0        | Type checking (`strict` mode, no `any`)    |
+| `eslint` + `typescript-eslint` | ^10 / ^8.59 | Linting                                    |
+| `eslint-plugin-react-hooks`    | ^7.1        | Hooks rules enforcement                    |
+| `prettier`                     | ^3.8        | Code formatting                            |
+
+---
 
 ---
 
@@ -153,6 +155,8 @@ Live URL: **[https://show-business-three.vercel.app](https://show-business-three
 ## Environment
 
 No environment variables are required. All data comes from the public `https://dummyjson.com` REST API — the app works offline-first via TanStack Query's built-in cache once initial data has been fetched.
+
+---
 
 ---
 

@@ -13,6 +13,23 @@ export default defineConfig({
     }),
     react(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (id.includes('@mui/icons-material')) {
+            return 'mui-icons';
+          }
+          if (id.includes('@mui/material') || id.includes('@emotion')) {
+            return 'mui-core';
+          }
+          if (id.includes('@tanstack')) {
+            return 'tanstack';
+          }
+        },
+      },
+    },
+  },
   resolve: {
     alias: { '@': path.resolve(__dirname, './src') },
   },

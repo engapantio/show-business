@@ -13,7 +13,8 @@ export const newsQueries = {
   listAll: () =>
     queryOptions({
       queryKey: ['posts', 'list', 'all'],
-      queryFn: () => newsApi.getPosts(0, 0),
+      queryFn: () => newsApi.getPosts(100, 0),
+      staleTime: Infinity,
     }),
 
   detail: (id: number) =>
@@ -45,5 +46,6 @@ export const newsQueries = {
           return acc;
         }, {});
       },
+      staleTime: Infinity,
     }),
 };

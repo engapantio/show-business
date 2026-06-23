@@ -98,8 +98,11 @@ export const theme = createTheme({
           --second-family: "Poppins", sans-serif;
           --third-family: "League Gothic", sans-serif;
         }
-        html, body, #root {
-          height: 100%;
+        body, #root {
+          min-height: 100%;
+        }
+        html {
+        height: 100%;
         }
         body {
           margin: 0;
@@ -138,6 +141,10 @@ export const theme = createTheme({
           borderRadius: 12,
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderColor: green,
+          },
+          '&:focus-visible': {
+            outline: `2px solid #2ad18a`,
+            outlineOffset: 2,
           },
         },
         notchedOutline: {
