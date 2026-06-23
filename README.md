@@ -2,7 +2,7 @@
 
 A responsive news-browsing SPA built with React 19, TypeScript, and Material UI. Content is sourced from the public [DummyJSON](https://dummyjson.com) API. The project follows **Feature-Sliced Design (FSD)** and demonstrates clean separation of presentation and business logic throughout.
 
-***
+---
 
 ## Features
 
@@ -10,19 +10,25 @@ A responsive news-browsing SPA built with React 19, TypeScript, and Material UI.
 |------|-------|-------------|
 | **Home** | `/` | Paginated news feed arranged in two alternating "band" layouts (large feature card + four top-story rows). Supports URL-based pagination (`?page=N`). |
 | **Explore** | `/explore` | Debounced search across all posts with a responsive 4-column card grid. Displays a randomised selection when the search field is empty. |
-| **Inspiration** | `/inspiration` | Surfaces a random post as a full-width feature card. The *Next Inspiration* button loads a new random post; hovering the button prefetches the next one. |
+| **Inspiration** | `/inspiration` | Surfaces a random post as a full-width feature card. The *Next Inspiration* button loads a new random post; hovering it prefetches the next one. Protected route — requires login. |
 | **News detail** | `/news/:id` | Individual post view with full body text and a comments section. |
 | **Contact** | `/contact` | Validated contact form (name, email, message) with Zod schema validation and TanStack Query mutation. |
 | **Login / Register** | `/login`, `/register` | Authentication forms with field-level validation, password visibility toggle, and redirect-on-success. |
 
 **Cross-cutting behaviour**
 
-- Skeleton shimmer on every data-loading state; graceful error fallback on broken images.
-- Smooth image fade-in (`opacity 0 → 1`) via a shared `PostImage` component that also resets correctly on navigation.
+- Skeleton shimmer on every data-loading state; graceful `ErrorBoundary` + retry on query failures.
+- Shared `PostImage` component: shimmer while loading, smooth `opacity` fade-in, error fallback to local SVG placeholder, resolved CDN URL caching to skip redirect round-trips on repeat visits, `fetchpriority="high"` on above-the-fold images.
+- Image preloading via `<link rel="preload">` injected into `<head>` for all visible images on Home and Explore before cards mount.
+- Route-level data loaders (`loader` + `ensureQueryData`) so navigation starts fetching before the component tree mounts — eliminates blank-screen delays.
+- Debounced search input (400 ms) on Explore — API calls fire only after the user stops typing.
 - Auth state persisted in a global store; protected routes redirect unauthenticated users to `/login?redirect=…`.
+- Mobile navigation drawer closes automatically when the viewport grows to desktop width (derived state, no effect).
+- `BigNewsCard` hero image stretches to match the height of the neighbouring `TopStoriesBlock` on desktop; fixed 381 px on tablet/mobile.
+- Scrollbar gutter reserved globally (`overflow-y: scroll`) — prevents layout shift when navigating between short and long pages.
 - Fully adaptive layout — single-column on mobile, multi-column grid on tablet and desktop.
 
-***
+---
 
 ## Tech stack
 
@@ -37,6 +43,7 @@ A responsive news-browsing SPA built with React 19, TypeScript, and Material UI.
 | `@tanstack/react-router` | ^1.170 | Type-safe file-based routing |
 | `@tanstack/react-router-devtools` | ^1.167 | Router dev overlay |
 | `@tanstack/react-query` | ^5.101 | Server-state management, caching, mutations |
+| `react-error-boundary` | ^5.x | Declarative error boundaries with query reset support |
 | `zod` | ^4.4 | Runtime schema validation for forms |
 | `@gouch/to-title-case` | ^2.2 | Title-case utility for post headings |
 
@@ -52,7 +59,7 @@ A responsive news-browsing SPA built with React 19, TypeScript, and Material UI.
 | `eslint-plugin-react-hooks` | ^7.1 | Hooks rules enforcement |
 | `prettier` | ^3.8 | Code formatting |
 
-***
+---
 
 ## Project structure
 
@@ -74,22 +81,22 @@ src/
 │   ├── login/
 │   ├── register/
 │   └── not-found/
-├── widgets/                # Composite UI blocks (Header, NewsBand, AuthLayout, CommentsSection …)
+├── widgets/                # Composite UI blocks (Header, NewsBand, CommentsSection …)
 ├── features/               # User-facing interactions (auth-by-username, contact-us)
 ├── entities/               # Domain models + API queries (news)
 │   └── news/
 ├── shared/                 # Reusable utilities, UI primitives, API client
-│   ├── api/
-│   ├── config/
-│   ├── lib/                # useDebounce, shuffle …
-│   ├── ui/                 # PostImage, PageContainer, Pagination …
+│   ├── api/                # HTTP client, QueryClient, ApiError
+│   ├── config/             # Constants (API base URL, page size)
+│   ├── lib/                # useDebounce, shuffle, resolvedImageCache …
+│   ├── ui/                 # PostImage, PageContainer, ErrorView, Logo …
 │   └── types/
 └── routeTree.gen.ts        # Auto-generated by @tanstack/router-plugin (do not edit)
 ```
 
 Each slice exposes a public barrel (`index.ts`) and is internally divided into `ui/`, `model/`, and `api/` segments. Pages contain only presentation components; all state and query logic lives in co-located `model/` hooks.
 
-***
+---
 
 ## Getting started
 
@@ -130,13 +137,24 @@ npm run format      # Prettier check
 npm run format:fix  # Prettier auto-format
 ```
 
-***
+---
+
+## Deployment
+
+The app is deployed on [Vercel](https://vercel.com). A `vercel.json` at the repo root configures:
+
+- **SPA fallback rewrite** — all routes resolve to `index.html` so deep links and page refreshes work correctly.
+- **Security headers** — `X-Frame-Options`, `X-Content-Type-Options`, `Cross-Origin-Opener-Policy`, and `Content-Security-Policy` are set on every response.
+
+Live URL: **[https://show-business-three.vercel.app](https://show-business-three.vercel.app)**
+
+---
 
 ## Environment
 
 No environment variables are required. All data comes from the public `https://dummyjson.com` REST API — the app works offline-first via TanStack Query's built-in cache once initial data has been fetched.
 
-***
+---
 
 ## Coding conventions
 
@@ -144,3 +162,4 @@ No environment variables are required. All data comes from the public `https://d
 - **Presentation / logic separation** — every page that owns state exposes a dedicated `model/use<PageName>.ts` hook; page components contain only JSX and event bindings.
 - **No direct `fetch` in components** — all remote data goes through TanStack Query hooks defined in `entities/*/api` or `features/*/api`.
 - **FSD import rules** — upper layers may import from lower layers only (`pages → widgets → features → entities → shared`); cross-slice imports at the same layer are forbidden.
+- **Effects for external systems only** — `useEffect` is used exclusively to interact with browser APIs (DOM, `matchMedia`, `document.head`); state derived from other state is computed inline, never synced via effects.
