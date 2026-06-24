@@ -38,6 +38,7 @@ export function BigNewsCard({ post }: { post: Post; imgSeed?: string }) {
         <PostImage
           key={post.id}
           postId={post.id}
+          variant='detail'
           width={620}
           height={259}
           alt={post.title}

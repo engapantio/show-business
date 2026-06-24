@@ -11,6 +11,7 @@ interface PostImageProps {
   alt: string;
   eager?: boolean;
   fill?: boolean;
+  variant: 'card' | 'detail' | 'hero' | 'explore';
   sx?: SxProps<Theme>;
 }
 
@@ -18,6 +19,7 @@ const PLACEHOLDER = '/placeholder.svg';
 
 export function PostImage({
   postId,
+  variant,
   width,
   height,
   alt,
@@ -28,7 +30,7 @@ export function PostImage({
   const [loaded, setLoaded] = useState(false);
   const [errored, setErrored] = useState(false);
 
-  const originalSrc = getPostImageUrl(postId, width, height);
+  const originalSrc = getPostImageUrl(postId, variant);
   const src = errored ? PLACEHOLDER : getCachedImageUrl(originalSrc);
 
   return (

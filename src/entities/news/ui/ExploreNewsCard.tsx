@@ -22,7 +22,7 @@ export function ExploreNewsCard({ post }: { post: Post }) {
           '&:hover': { opacity: 0.85 },
         }}
       >
-        <PostImage key={post.id} postId={post.id} width={290} height={242} alt={post.title} />
+        <PostImage key={post.id} postId={post.id} width={290} height={242} variant='explore' alt={post.title} />
         <Typography
           sx={{
             width: '100%',

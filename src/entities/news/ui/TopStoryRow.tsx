@@ -110,6 +110,7 @@ export function TopStoryRow({ post, index, commentsCount }: TopStoryRowProps) {
         postId={post.id}
         width={200}
         height={124}
+        variant='detail'
         alt={post.title}
         eager={index === 0}
         sx={{

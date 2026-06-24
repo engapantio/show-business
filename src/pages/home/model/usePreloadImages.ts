@@ -15,7 +15,7 @@ export function usePreloadHomeImages(posts: Post[]): void {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'image';
-      link.href = getPostImageUrl(id, 620, 409);
+      link.href = getPostImageUrl(id, 'hero');
       document.head.appendChild(link);
       links.push(link);
     });
@@ -24,7 +24,7 @@ export function usePreloadHomeImages(posts: Post[]): void {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'image';
-      link.href = getPostImageUrl(id, 200, 124);
+      link.href = getPostImageUrl(id, 'card');
       document.head.appendChild(link);
       links.push(link);
     });
